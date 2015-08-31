@@ -64,7 +64,10 @@ namespace AVManager2.gg
 
             foreach (Users item in userList)
             {
-                Console.WriteLine(item.Name + " " + item.Sex);
+                if (item != null)
+                {
+                    Console.WriteLine(item.Name + " " + item.Sex);
+                }
             }
         }
 
@@ -100,8 +103,16 @@ namespace AVManager2.gg
 
         public static IEnumerable<Users> Search(IMongoQuery query)
         {
-            foreach (BsonDocument tmp in MongoDBHelper.Search("TestDB", tableUser, query))
-                yield return new Users(tmp["name"].AsString, tmp["age"].AsInt32, tmp["sex"].AsString);
+            MongoCursor<BsonDocument> list = MongoDBHelper.Search("TestDB", tableUser, query);
+            if (list != null)
+            {
+                foreach (BsonDocument tmp in list)
+                    yield return new Users(tmp["name"].AsString, tmp["age"].AsInt32, tmp["sex"].AsString);
+            }
+            else
+            {
+                yield return null;
+            }
         }
 
         public static Boolean Remove(IMongoQuery query)

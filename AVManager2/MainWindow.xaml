@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVManager2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="800" Width="1200">
     <Canvas Width="Auto" Height="Auto">
         <Button x:Name="button" Content="获取" HorizontalAlignment="Left" Margin="220,195,0,0" VerticalAlignment="Top" Width="75" Click="button_Click_1"/>
         <Button x:Name="button1" Content="添加" Canvas.Left="114" Canvas.Top="132" Width="75" Click="button_Click"/>
