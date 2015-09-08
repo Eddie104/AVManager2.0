@@ -22,7 +22,7 @@ namespace libra.db.mongoDB
         /// <param name="collectionName">表名</param>
         /// <param name="query">查找条件</param>
         /// <returns>查找的结果</returns>
-        public static MongoCursor<BsonDocument> Search(string dbName, string collectionName, IMongoQuery query)
+        public static MongoCursor<BsonDocument> Search(string dbName, string collectionName, IMongoQuery query = null)
         {
             MongoCollection<BsonDocument> collection;
             MongoServer server = CreateMongoServer(collectionName, dbName, out collection);

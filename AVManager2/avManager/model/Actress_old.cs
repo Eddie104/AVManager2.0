@@ -2,7 +2,7 @@
 
 namespace AVManager2.avManager.model
 {
-    class Actress : Collection
+    class Actress_old : Collection_old
     {
 
         public string Name { get; set; }
