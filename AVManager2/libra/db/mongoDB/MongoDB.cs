@@ -120,7 +120,15 @@ namespace libra.db.mongoDB
                 if (server == null)
                 {
                     server = new MongoClient(connectionString).GetServer();
-                    server.Connect();
+                    try
+                    {
+                        server.Connect();
+                    }
+                    catch (System.Exception)
+                    {
+                        collection = null;
+                        return null;
+                    }
                 }
                 if (server.State == MongoServerState.Connected)
                 {

@@ -23,8 +23,11 @@ namespace avManager.model
         public void Init()
         {
             MongoCursor<BsonDocument> list = MongoDBHelper.Search(collectionName);
-            foreach (BsonDocument doc in list)
-                this.actressList.Add(new Actress(doc["_id"].AsObjectId, doc["name"].AsString));
+            if (list != null)
+            {
+                foreach (BsonDocument doc in list)
+                    this.actressList.Add(new Actress(doc));
+            }
         }
 
         public void AddActress(string name)
@@ -67,6 +70,11 @@ namespace avManager.model
                 }
             }
             return null;
+        }
+
+        public Actress GetFirstActress()
+        {
+            return actressList.Count > 0 ? actressList[0] : null;
         }
 
         public void SaveToDB()
