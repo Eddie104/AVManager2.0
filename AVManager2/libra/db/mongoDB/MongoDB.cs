@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using MongoDB.Bson;
-using MongoDB.Driver.Builders;
 
 namespace libra.db.mongoDB
 {
@@ -13,29 +7,34 @@ namespace libra.db.mongoDB
     {
         public static string connectionString;
 
+        public static string dbName = null;
+
         private static MongoServer server;
 
         /// <summary>
         /// 查找
         /// </summary>
-        /// <param name="dbName">数据库名</param>
         /// <param name="collectionName">表名</param>
         /// <param name="query">查找条件</param>
         /// <returns>查找的结果</returns>
-        public static MongoCursor<BsonDocument> Search(string dbName, string collectionName, IMongoQuery query = null)
+        public static MongoCursor<BsonDocument> Search(string collectionName, IMongoQuery query = null)
         {
             MongoCollection<BsonDocument> collection;
-            MongoServer server = CreateMongoServer(collectionName, dbName, out collection);
+            MongoServer server = CreateMongoServer(collectionName, out collection);
             if (server != null && collection != null)
             {
                 try
                 {
                     return query == null ? collection.FindAll() : collection.Find(query);
                 }
-                finally
+                catch
                 {
-                    server.Disconnect();
+                    return null;
                 }
+                //finally
+                //{
+                //    server.Disconnect();
+                //}
             }
             else
             {
@@ -46,23 +45,22 @@ namespace libra.db.mongoDB
         /// <summary>
         /// 插入一条新的数据
         /// </summary>
-        /// <param name="dbName"></param>
         /// <param name="collectionName"></param>
         /// <param name="document"></param>
         /// <returns></returns>
-        public static bool Insert(string dbName, string collectionName, BsonDocument document)
+        public static bool Insert(string collectionName, BsonDocument document)
         {
             MongoCollection<BsonDocument> collection;
-            MongoServer server = CreateMongoServer(collectionName, dbName, out collection);
+            MongoServer server = CreateMongoServer(collectionName, out collection);
             try
             {
                 collection.Insert(document);
-                server.Disconnect();
+                //server.Disconnect();
                 return true;
             }
             catch
             {
-                server.Disconnect();
+                //server.Disconnect();
                 return false;
             }
         }
@@ -70,19 +68,19 @@ namespace libra.db.mongoDB
         /// <summary>
         /// 修改
         /// </summary>  
-        public static bool Update(string dbName, string collectionName, IMongoQuery query, IMongoUpdate newDoc)
+        public static bool Update(string collectionName, IMongoQuery query, IMongoUpdate newDoc)
         {
             MongoCollection<BsonDocument> collection;
-            MongoServer server = CreateMongoServer(collectionName, dbName, out collection);
+            MongoServer server = CreateMongoServer(collectionName, out collection);
             try
             {
                 collection.Update(query, newDoc);
-                server.Disconnect();
+                //server.Disconnect();
                 return true;
             }
             catch
             {
-                server.Disconnect();
+                //server.Disconnect();
                 return false;
             }
         }
@@ -90,23 +88,27 @@ namespace libra.db.mongoDB
         /// <summary>
         /// 移除
         /// </summary>
-        public static bool Remove(string dbName, string collectionName, IMongoQuery query)
+        public static bool Remove(string collectionName, IMongoQuery query = null)
         {
             MongoCollection<BsonDocument> collection;
-            MongoServer server = CreateMongoServer(collectionName, dbName, out collection);
+            MongoServer server = CreateMongoServer(collectionName, out collection);
             bool ok = false;
             try
             {
                 ok = collection.Remove(query).Ok;
             }
-            finally
+            catch
             {
-                server.Disconnect();
+                ok = false;
             }
+            //finally
+            //{
+            //    server.Disconnect();
+            //}
             return ok;
         }
 
-        private static MongoServer CreateMongoServer(string collectionName, string dbName, out MongoCollection<BsonDocument> collection)
+        private static MongoServer CreateMongoServer(string collectionName, out MongoCollection<BsonDocument> collection)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
@@ -118,11 +120,20 @@ namespace libra.db.mongoDB
                 if (server == null)
                 {
                     server = new MongoClient(connectionString).GetServer();
+                    server.Connect();
                 }
-                if (server.State == MongoServerState.Connecting)
+                if (server.State == MongoServerState.Connected)
                 {
-                    collection = server.GetDatabase(dbName).GetCollection<BsonDocument>(collectionName);
-                    return server;
+                    if (!string.IsNullOrEmpty(dbName))
+                    {
+                        collection = server.GetDatabase(dbName).GetCollection<BsonDocument>(collectionName);
+                        return server;
+                    }
+                    else
+                    {
+                        collection = null;
+                        return null;
+                    }
                 }
                 else
                 {

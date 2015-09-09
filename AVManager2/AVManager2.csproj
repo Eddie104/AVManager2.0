@@ -71,16 +71,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="avManager\model\Actress_old.cs" />
     <Compile Include="avManager\model\ActressManager.cs" />
-    <Compile Include="avManager\model\Collection_old.cs" />
     <Compile Include="avManager\model\data\Actress.cs" />
     <Compile Include="avManager\model\data\Data.cs" />
-    <Compile Include="avManager\model\DBManager_old.cs" />
     <Compile Include="gg\IInterface.cs" />
     <Compile Include="gg\MongoDBTest.cs" />
     <Compile Include="gg\Test.cs" />
     <Compile Include="libra\db\mongoDB\MongoDB.cs" />
+    <Compile Include="libra\db\mongoDB\ObjectIdGenerator.cs" />
     <Compile Include="libra\util\RegularHelper.cs" />
     <Compile Include="libra\web\HTMLHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">

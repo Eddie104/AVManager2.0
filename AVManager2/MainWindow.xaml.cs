@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows;
-using AVManager2.gg;
 using System.Net;
 using System.Text;
 using System.IO;
 using System.Threading;
-using AVManager2.libra.web;
+using libra.web;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using libra.db.mongoDB;
+using avManager.model;
 
 namespace AVManager2
 {
@@ -17,58 +18,44 @@ namespace AVManager2
     public partial class MainWindow : Window
     {
 
-        private MongoDBTest test;
+        private ActressManager actressManager;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            test = new MongoDBTest();
+            MongoDBHelper.connectionString = "mongodb://localhost";
+            MongoDBHelper.dbName = "avdb";
 
+            actressManager = ActressManager.GetInstance();
+            actressManager.Init();
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            
-            if (test.Insert())
-            {
-                Console.WriteLine("ok");
-            }
-            else
-            {
-                Console.WriteLine("no ok");
-            }
-        }
-
-        private void button_Click_1(object sender, RoutedEventArgs e)
-        {
-            test.Select();
+            actressManager.AddActress("name123");
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
         {
-            //if(test.Modify())
-            //{
-            //    Console.WriteLine("修改成功");
-            //}
-            //else
-            //{
-            //    Console.WriteLine("修改失败");
-            //}
             //HTMLHelper.GetInstance().GetHtml("http://www.javlibrary.com/cn/vl_searchbyid.php?keyword=SHKD-638", this.callback);
 
-            string s = "";
-            using (StreamReader sr = new StreamReader("tt.txt", Encoding.Default))
-            {
-                s = sr.ReadToEnd();
-            }
-            this.ttt(s);
+            //string s = "";
+            //using (StreamReader sr = new StreamReader("tt.txt", Encoding.Default))
+            //{
+            //    s = sr.ReadToEnd();
+            //}
+            //this.ttt(s);
+
+            //actressManager.UpdateActress(actressManager.GetFirstActress().ID, new Dictionary<string, object>() {
+            //    {"Name", "testName" }
+            //});
         }
 
-        private void callback(string html)
-        {
-            Console.WriteLine(html);
-        }
+        //private void callback(string html)
+        //{
+        //    Console.WriteLine(html);
+        //}
 
         private void ttt(string html)
         {
@@ -119,6 +106,22 @@ namespace AVManager2
                     Console.WriteLine("种子下载地址 = {0}", item.Split(new char[] { ']' })[0].Replace("[url=", ""));
                 }
             }
+        }
+        
+        /// <summary>
+        /// 清空
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            //test.Remove();
+            //actressManager.RemoveActress(actressManager.GetFirstActress().ID);
+        }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+            this.actressManager.SaveToDB();
         }
     }
 }
