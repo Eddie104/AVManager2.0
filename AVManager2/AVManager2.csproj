@@ -63,6 +63,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="avManager\view\actress\ActressInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="avManager\view\actress\ActressInfoContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,10 +80,18 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="avManager\model\ActressManager.cs" />
+    <Compile Include="avManager\model\ClassTypeManager.cs" />
     <Compile Include="avManager\model\data\Actress.cs" />
+    <Compile Include="avManager\model\data\ClassType.cs" />
     <Compile Include="avManager\model\data\Data.cs" />
     <Compile Include="avManager\model\data\Video.cs" />
     <Compile Include="avManager\model\VideoManager.cs" />
+    <Compile Include="avManager\view\actress\ActressInfo.xaml.cs">
+      <DependentUpon>ActressInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="avManager\view\actress\ActressInfoContainer.xaml.cs">
+      <DependentUpon>ActressInfoContainer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="libra\db\mongoDB\MongoDB.cs" />
     <Compile Include="libra\db\mongoDB\ObjectIdGenerator.cs" />
     <Compile Include="libra\util\ByteConvertHelper.cs" />

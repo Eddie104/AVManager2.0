@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace avManager.model.data
 {
-    class Video : Data
+    public class Video : Data
     {
 
         /// <summary>
@@ -28,14 +28,14 @@ namespace avManager.model.data
         /// <summary>
         /// 类别
         /// </summary>
-        [DB(DBField = "class", DataType = DataType.IntList)]
-        public List<int> ClassList { get; set; }
+        [DB(DBField = "class", DataType = DataType.ObjectIdList)]
+        public List<ObjectId> ClassList { get; set; }
 
         /// <summary>
         /// 演员
         /// </summary>
-        [DB(DBField = "actress", DataType = DataType.IntList)]
-        public List<int> ActressList { get; set; }
+        [DB(DBField = "actress", DataType = DataType.ObjectIdList)]
+        public List<ObjectId> ActressList { get; set; }
 
         /// <summary>
         /// 种子地址

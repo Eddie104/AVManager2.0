@@ -14,6 +14,7 @@ namespace avManager.model.data
         Int32,
         String,
         Date,
+        ObjectIdList,
         IntList,
         StringList
     }
@@ -25,7 +26,7 @@ namespace avManager.model.data
         public DataType DataType { get; set; }
     }
 
-    class Data
+    public class Data
     {
         [DB(DBField = "_id", DataType = DataType.ObjectId)]
         public ObjectId ID { get; set; }
@@ -65,7 +66,7 @@ namespace avManager.model.data
                         }
                         else if (dbAttribute.DataType == DataType.Date)
                         {
-                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].ToUniversalTime());
+                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? new DateTime(1980, 1, 1) : bsonDocument[dbAttribute.DBField].ToUniversalTime());
                         }
                         else if(dbAttribute.DataType == DataType.IntList)
                         {
@@ -89,6 +90,19 @@ namespace avManager.model.data
                                 foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
                                 {
                                     list.Add(val.AsString);
+                                }
+                            }
+                            propertyInfo.SetValue(this, list);
+                        }
+                        else if (dbAttribute.DataType == DataType.ObjectIdList)
+                        {
+                            List<ObjectId> list = null;
+                            if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                            {
+                                list = new List<ObjectId>();
+                                foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
+                                {
+                                    list.Add(val.AsObjectId);
                                 }
                             }
                             propertyInfo.SetValue(this, list);

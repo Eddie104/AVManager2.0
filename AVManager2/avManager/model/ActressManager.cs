@@ -2,6 +2,7 @@
 using libra.db.mongoDB;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 
 namespace avManager.model
@@ -30,11 +31,12 @@ namespace avManager.model
             }
         }
 
-        public void AddActress(string name)
+        public Actress AddActress(string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup)
         {
-            Actress a = new Actress(new ObjectId(ObjectIdGenerator.Generate()), name);
+            Actress a = new Actress(new ObjectId(ObjectIdGenerator.Generate()), name, alias, birthday, height, bust, waist, hip, cup);
             this.actressList.Add(a);
             a.NeedInsert = true;
+            return a;
         }
 
         public Actress RemoveActress(ObjectId id)
@@ -72,10 +74,38 @@ namespace avManager.model
             return null;
         }
 
-        public Actress GetFirstActress()
+        public Actress GetActress(string name)
         {
-            return actressList.Count > 0 ? actressList[0] : null;
+            foreach (Actress actress in actressList)
+            {
+                if (actress.Name.Contains(name) || actress.Alias.Contains(name))
+                {
+                    return actress;
+                }
+            }
+            return null;
         }
+
+        public List<Actress> GetActressList()
+        {
+            return this.actressList;
+        }
+
+        public List<Actress> GetActressList(int startIndex, int length)
+        {
+            List<Actress> result = new List<Actress>();
+            int endIndex = Math.Min(startIndex + length - 1, this.actressList.Count - 1);
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                result.Add(this.actressList[i]);
+            }
+            return result;
+        }
+
+        //public Actress GetFirstActress()
+        //{
+        //    return actressList.Count > 0 ? actressList[0] : null;
+        //}
 
         public void SaveToDB()
         {

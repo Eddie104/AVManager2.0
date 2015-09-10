@@ -28,22 +28,19 @@ namespace avManager.model
             {
                 foreach (BsonDocument doc in list)
                     this.videoList.Add(new Video(doc));
-                foreach (var item in videoList)
-                {
-                    Console.WriteLine(item);
-                }
             }
         }
 
-        public void AddVideo(string name)
+        public Video AddVideo(string name)
         {
-            this.AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), name));
+            return this.AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), name));
         }
 
-        public void AddVideo(Video v)
+        public Video AddVideo(Video v)
         {
             this.videoList.Add(v);
             v.NeedInsert = true;
+            return v;
         }
 
         public Video RemoveVideo(ObjectId id)
@@ -114,8 +111,8 @@ namespace avManager.model
         {
             Video v = new Video();
             v.TorrentList = new List<string>();
-            v.ActressList = new List<int>();
-            v.ClassList = new List<int>();
+            v.ActressList = new List<ObjectId>();
+            v.ClassList = new List<ObjectId>();
             string imgURL = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
             v.Cover = imgURL;
 
@@ -145,17 +142,21 @@ namespace avManager.model
                     var classList = regA.Matches(tdList[i + 1].ToString());
                     foreach (var classItem in classList)
                     {
-                        //v.ClassList.Add()
-                        Console.WriteLine("类别 = {0}", regPlace.Replace(classItem.ToString(), "").Replace("</a>", ""));
+                        v.ClassList.Add(ClassTypeManager.GetInstance().GetClassType(regPlace.Replace(classItem.ToString(), "").Replace("</a>", "")).ID);
                     }
                 }
                 else if (item.Contains("演员"))
                 {
+                    Actress a;
                     Regex regPlace = new Regex("<a href=\"vl_star.php\\?s=\\w+\" rel=\"tag\">");
                     var classList = regA.Matches(tdList[i + 1].ToString());
                     foreach (var classItem in classList)
                     {
-                        Console.WriteLine("演员 = {0}", regPlace.Replace(classItem.ToString(), "").Replace("</a>", ""));
+                        a = ActressManager.GetInstance().GetActress(regPlace.Replace(classItem.ToString(), "").Replace("</a>", ""));
+                        if (a != null)
+                        {
+                            v.ActressList.Add(a.ID);
+                        }
                     }
                 }
                 else if (item.Contains("[url="))
