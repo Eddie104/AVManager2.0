@@ -22,6 +22,8 @@ namespace AVManager2.avManager.view.actress
     public partial class ActressInfo : UserControl
     {
 
+        public event EventHandler Click;
+
         private Actress actress;
         public Actress Actress
         {
@@ -29,15 +31,29 @@ namespace AVManager2.avManager.view.actress
             set
             {
                 actress = value;
-                nameLabel.Text = actress.Name;
-                ageLabel.Text = string.Format("年龄:{0}", DateTime.Now.Year - actress.Birthday.Year);
-                heightLabel.Text = string.Format("身高:{0}", actress.Height);
+                if (actress == null)
+                {
+                    this.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    this.Visibility = Visibility.Visible;
+                    nameLabel.Text = actress.Name;
+                    ageLabel.Text = string.Format("年龄:{0}", DateTime.Now.Year - actress.Birthday.Year);
+                    heightLabel.Text = string.Format("身高:{0}", actress.Height);
+                }
             }
         }
 
         public ActressInfo()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Click(this, e);
+            e.Handled = false;
         }
     }
 }

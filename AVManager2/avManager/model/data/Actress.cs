@@ -49,6 +49,12 @@ namespace avManager.model.data
         /// </summary>
         [DB(DBField = "cup", DataType = DataType.String)]
         public string Cup { get; set; }
+        
+        /// <summary>
+        /// 评分
+        /// </summary>
+        [DB(DBField = "score", DataType = DataType.Int32)]
+        public int Score { get; set; }
 
         public Actress(BsonDocument bsonDocument) : base(bsonDocument) { }
 

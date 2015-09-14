@@ -108,6 +108,14 @@ namespace libra.db.mongoDB
             return ok;
         }
 
+        public static void Exit()
+        {
+            if (server != null && server.State == MongoServerState.Connected)
+            {
+                server.Disconnect();
+            }            
+        }
+
         private static MongoServer CreateMongoServer(string collectionName, out MongoCollection<BsonDocument> collection)
         {
             if (string.IsNullOrEmpty(connectionString))

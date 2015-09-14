@@ -1,5 +1,6 @@
 ﻿using avManager.model;
 using libra.db.mongoDB;
+using libra.util;
 using System;
 using System.IO;
 using System.Text;
@@ -38,9 +39,10 @@ namespace AVManager2
             actressInfoContainer.InitActressInfo();
         }
 
+        private int t = 11;
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            actressManager.AddActress("name123", "", DateTime.Now, 160, 90, 60, 90, "C");
+            actressManager.AddActress(string.Format("name{0}", t++), "", DateTime.Now, 160, 90, 60, 90, "C");
         }
 
         private void button2_Click(object sender, RoutedEventArgs e)
@@ -89,7 +91,32 @@ namespace AVManager2
 
         private void button5_Click(object sender, RoutedEventArgs e)
         {
-            
+            ImageHelper.DoGetImage("http://n.sinaimg.cn/transform/20150914/-ybr-fxhupir7102739.jpg", "ttttt.jpg");
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// 退出
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MenuExitItem_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// 退出之前，把数据库连接给关了
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            MongoDBHelper.Exit();
         }
     }
 }

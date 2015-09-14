@@ -8,11 +8,23 @@
              d:DesignHeight="1200" d:DesignWidth="800">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
-            <!--<TextBlock Name="actressNameLabel" Text="333" TextAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Left"/>-->
-            <Button Content="下一页" DockPanel.Dock="Right" Margin="0, 0, 10, 0"/>
+            <Button Content="下一页" DockPanel.Dock="Right" Margin="0, 0, 10, 0" Click="OnNextPageHandler"/>
             <TextBox Name="pageLabel" Width="38" DockPanel.Dock="Right" Margin="10, 0, 10, 0" Text="1" TextAlignment="Center" VerticalAlignment="Center"/>
-            <Button Content="上一页" DockPanel.Dock="Right"/>
+            <Button Content="上一页" DockPanel.Dock="Right" Click="OnPrevPageHander"/>
+            <Label Content="名字关键字:"/>
+            <TextBox Name="nameKeyWordTextBox" Width="60" VerticalAlignment="Center" TextChanged="OnFilterActressInfo"/>
+            <Label Content="身高区间"/>
+            <TextBox Name="minHeightTextBox" Text="0" Width="30" VerticalAlignment="Center" TextChanged="OnFilterActressInfo" DataObject.Pasting="OnTextPasting" PreviewKeyDown="OnTextBoxPreviewKeyDown" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="OnTextBoxPreviewTextInput"/>
+            <Label Content="--"/>
+            <TextBox Name="maxHeightTextBox" Text="0" Width="30" VerticalAlignment="Center" TextChanged="OnFilterActressInfo" DataObject.Pasting="OnTextPasting" PreviewKeyDown="OnTextBoxPreviewKeyDown" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="OnTextBoxPreviewTextInput"/>
+            <Label Content="排序"/>
+            <ComboBox>
+                <ComboBoxItem Content="评分↓" IsSelected="True"></ComboBoxItem>
+                <ComboBoxItem Content="评分↑"></ComboBoxItem>
+            </ComboBox>
         </DockPanel>
-        <WrapPanel Name="actressInfoContainer"></WrapPanel>
+        <ScrollViewer>
+            <WrapPanel Name="actressInfoContainer"></WrapPanel>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

@@ -91,13 +91,61 @@ namespace avManager.model
             return this.actressList;
         }
 
-        public List<Actress> GetActressList(int startIndex, int length)
+        public List<Actress> GetActressList(string name)
         {
             List<Actress> result = new List<Actress>();
-            int endIndex = Math.Min(startIndex + length - 1, this.actressList.Count - 1);
-            for (int i = startIndex; i <= endIndex; i++)
+            foreach (Actress actress in actressList)
             {
-                result.Add(this.actressList[i]);
+                if (actress.Name.Contains(name) || actress.Alias.Contains(name))
+                {
+                    result.Add(actress);
+                }
+            }
+            return result;
+        }
+
+        //public List<Actress> GetActressList(int startIndex, int length)
+        //{
+        //    List<Actress> result = new List<Actress>();
+        //    int endIndex = Math.Min(startIndex + length - 1, this.actressList.Count - 1);
+        //    for (int i = startIndex; i <= endIndex; i++)
+        //    {
+        //        result.Add(this.actressList[i]);
+        //    }
+        //    return result;
+        //}
+
+        //public List<Actress> GetActressList(int minHeight, int maxHeight)
+        //{
+        //    List<Actress> result = new List<Actress>();
+        //    foreach (Actress a in this.actressList)
+        //    {
+        //        if (a.Height >= minHeight && a.Height <= maxHeight)
+        //        {
+        //            result.Add(a);
+        //        }
+        //    }
+        //    return result;
+        //}
+
+        public List<Actress> GetActressList(string nameKeyWord, int minHeight, int maxHeight)
+        {
+            List<Actress> result = new List<Actress>();
+            List<Actress> actressList = string.IsNullOrEmpty(nameKeyWord) ? this.actressList : GetActressList(nameKeyWord);
+
+            if (maxHeight > minHeight)
+            {
+                foreach (Actress a in actressList)
+                {
+                    if (a.Height >= minHeight && a.Height <= maxHeight)
+                    {
+                        result.Add(a);
+                    }
+                }
+            }
+            else
+            {
+                result = actressList;
             }
             return result;
         }

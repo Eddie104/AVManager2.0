@@ -52,60 +52,67 @@ namespace avManager.model.data
                     if (attribute is DBAttribute)
                     {
                         dbAttribute = attribute as DBAttribute;
-                        if (dbAttribute.DataType == DataType.ObjectId)
+                        if (bsonDocument.Contains(dbAttribute.DBField))
                         {
-                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].AsObjectId);
-                        }
-                        else if (dbAttribute.DataType == DataType.Int32)
-                        {
-                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].AsInt32);
-                        }
-                        else if (dbAttribute.DataType == DataType.String)
-                        {
-                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? "" : bsonDocument[dbAttribute.DBField].AsString);
-                        }
-                        else if (dbAttribute.DataType == DataType.Date)
-                        {
-                            propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? new DateTime(1980, 1, 1) : bsonDocument[dbAttribute.DBField].ToUniversalTime());
-                        }
-                        else if(dbAttribute.DataType == DataType.IntList)
-                        {
-                            List<int> list = null;
-                            if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                            if (dbAttribute.DataType == DataType.ObjectId)
                             {
-                                list = new List<int>();
-                                foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
-                                {
-                                    list.Add(val.AsInt32);
-                                }
+                                propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].AsObjectId);
                             }
-                            propertyInfo.SetValue(this, list);
-                        }
-                        else if (dbAttribute.DataType == DataType.StringList)
-                        {
-                            List<string> list = null;
-                            if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                            else if (dbAttribute.DataType == DataType.Int32)
                             {
-                                list = new List<string>();
-                                foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
-                                {
-                                    list.Add(val.AsString);
-                                }
+                                propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].AsInt32);
                             }
-                            propertyInfo.SetValue(this, list);
-                        }
-                        else if (dbAttribute.DataType == DataType.ObjectIdList)
-                        {
-                            List<ObjectId> list = null;
-                            if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                            else if (dbAttribute.DataType == DataType.String)
                             {
-                                list = new List<ObjectId>();
-                                foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
-                                {
-                                    list.Add(val.AsObjectId);
-                                }
+                                propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? "" : bsonDocument[dbAttribute.DBField].AsString);
                             }
-                            propertyInfo.SetValue(this, list);
+                            else if (dbAttribute.DataType == DataType.Date)
+                            {
+                                propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? new DateTime(1980, 1, 1) : bsonDocument[dbAttribute.DBField].ToUniversalTime());
+                            }
+                            else if (dbAttribute.DataType == DataType.IntList)
+                            {
+                                List<int> list = null;
+                                if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                                {
+                                    list = new List<int>();
+                                    foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
+                                    {
+                                        list.Add(val.AsInt32);
+                                    }
+                                }
+                                propertyInfo.SetValue(this, list);
+                            }
+                            else if (dbAttribute.DataType == DataType.StringList)
+                            {
+                                List<string> list = null;
+                                if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                                {
+                                    list = new List<string>();
+                                    foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
+                                    {
+                                        list.Add(val.AsString);
+                                    }
+                                }
+                                propertyInfo.SetValue(this, list);
+                            }
+                            else if (dbAttribute.DataType == DataType.ObjectIdList)
+                            {
+                                List<ObjectId> list = null;
+                                if (!bsonDocument[dbAttribute.DBField].IsBsonNull)
+                                {
+                                    list = new List<ObjectId>();
+                                    foreach (var val in bsonDocument[dbAttribute.DBField].AsBsonArray.ToList())
+                                    {
+                                        list.Add(val.AsObjectId);
+                                    }
+                                }
+                                propertyInfo.SetValue(this, list);
+                            }
+                        }
+                        else
+                        {
+                            this.NeedUpdate = true;
                         }
                     }
                 }

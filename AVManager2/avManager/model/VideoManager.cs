@@ -38,8 +38,14 @@ namespace avManager.model
 
         public Video AddVideo(Video v)
         {
-            this.videoList.Add(v);
-            v.NeedInsert = true;
+            if (v != null)
+            {
+                if (GetVideo(v.Code) == null)
+                {
+                    this.videoList.Add(v);
+                    v.NeedInsert = true;
+                }
+            }
             return v;
         }
 
@@ -71,6 +77,18 @@ namespace avManager.model
             foreach (Video v in videoList)
             {
                 if (v.ID == id)
+                {
+                    return v;
+                }
+            }
+            return null;
+        }
+
+        public Video GetVideo(string code)
+        {
+            foreach (Video v in videoList)
+            {
+                if (v.Code == code)
                 {
                     return v;
                 }
@@ -115,6 +133,8 @@ namespace avManager.model
             v.ClassList = new List<ObjectId>();
             string imgURL = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
             v.Cover = imgURL;
+            //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033ps.jpg
+            //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033pl.jpg
 
             string name = Regex.Match(Regex.Match(html, "<div id=\"video_title.*</a></h3>").ToString(), @"[A-Z]+-\d+\s.*</a>").ToString().Replace("</a>", "");
             v.Name = name;

@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,6 +72,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="avManager\view\video\NewVideoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="avManager\view\video\VideoInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="avManager\view\video\VideoInfoContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -92,10 +105,21 @@
     <Compile Include="avManager\view\actress\ActressInfoContainer.xaml.cs">
       <DependentUpon>ActressInfoContainer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="avManager\view\video\NewVideoWindow.xaml.cs">
+      <DependentUpon>NewVideoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="avManager\view\video\VideoInfo.xaml.cs">
+      <DependentUpon>VideoInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="avManager\view\video\VideoInfoContainer.xaml.cs">
+      <DependentUpon>VideoInfoContainer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="libra\db\mongoDB\MongoDB.cs" />
     <Compile Include="libra\db\mongoDB\ObjectIdGenerator.cs" />
     <Compile Include="libra\util\ByteConvertHelper.cs" />
+    <Compile Include="libra\util\ImageHelper.cs" />
     <Compile Include="libra\util\RegularHelper.cs" />
+    <Compile Include="libra\util\StringHelper.cs" />
     <Compile Include="libra\web\HTMLHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
