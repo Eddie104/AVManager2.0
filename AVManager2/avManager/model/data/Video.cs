@@ -7,11 +7,11 @@ namespace avManager.model.data
     public class Video : Data
     {
 
-        /// <summary>
-        /// 封面
-        /// </summary>
-        [DB(DBField = "cover", DataType = DataType.String)]
-        public string Cover { get; set; }
+        ///// <summary>
+        ///// 封面
+        ///// </summary>
+        //[DB(DBField = "cover", DataType = DataType.String)]
+        //public string Cover { get; set; }
 
         /// <summary>
         /// 番号
@@ -42,6 +42,8 @@ namespace avManager.model.data
         /// </summary>
         [DB(DBField = "torrent", DataType = DataType.StringList)]
         public List<string> TorrentList { get; set; }
+
+        public string ImgUrl { get; set; }
 
         public Video(BsonDocument bsonDocument) : base(bsonDocument) { }
 

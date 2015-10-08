@@ -58,7 +58,8 @@ namespace AVManager2.avManager.view.actress
 
         private void OnActressInfoClicked(object sender, EventArgs e)
         {
-            Console.WriteLine("a = {0}", (sender as ActressInfo).Actress.Name);
+            //Console.WriteLine("a = {0}", (sender as ActressInfo).Actress.Name);
+
         }
 
         /// <summary>
@@ -135,8 +136,11 @@ namespace AVManager2.avManager.view.actress
             {
                 ActressFilter af = new ActressFilter();
                 af.NameKeyWord = this.nameKeyWordTextBox.Text;
-                af.MinHeight = int.Parse(this.minHeightTextBox.Text);
-                af.MaxHeight = int.Parse(this.maxHeightTextBox.Text);
+                int minHeight = 0, maxHeight = 0;
+                int.TryParse(this.minHeightTextBox.Text, out minHeight);
+                int.TryParse(this.maxHeightTextBox.Text, out maxHeight);
+                af.MinHeight = minHeight;
+                af.MaxHeight = maxHeight;
                 this.FilterActress(af);
             }
         }

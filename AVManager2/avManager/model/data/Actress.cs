@@ -17,8 +17,8 @@ namespace avManager.model.data
         /// <summary>
         /// 生日
         /// </summary>
-        [DB(DBField = "brithday", DataType = DataType.Date)]
-        public DateTime Birthday { get; set; }
+        [DB(DBField = "birthday", DataType = DataType.Date)]
+        public DateTime Birthday{ get; set; }
 
         /// <summary>
         /// 身高
@@ -35,7 +35,7 @@ namespace avManager.model.data
         /// <summary>
         /// 腰围
         /// </summary>
-        [DB(DBField = "wasit", DataType = DataType.Int32)]
+        [DB(DBField = "waist", DataType = DataType.Int32)]
         public int Waist { get; set; }
 
         /// <summary>
@@ -55,6 +55,12 @@ namespace avManager.model.data
         /// </summary>
         [DB(DBField = "score", DataType = DataType.Int32)]
         public int Score { get; set; }
+
+        /// <summary>
+        /// 图片名
+        /// </summary>
+        [DB(DBField = "code", DataType = DataType.String)]
+        public string Code { get; set; }
 
         public Actress(BsonDocument bsonDocument) : base(bsonDocument) { }
 

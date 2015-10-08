@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVManager2.avManager.view.video"
         mc:Ignorable="d"
-        Title="添加影片" Height="260" Width="320" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="添加影片" Height="600" Width="1200" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Canvas>
         <Label Content="番号:" Canvas.Left="8" Canvas.Top="25"/>
         <TextBox Name="codeTextBox" Width="135" Canvas.Left="69" Canvas.Top="29" VerticalAlignment="Center"/>
@@ -20,5 +20,6 @@
         <TextBox x:Name="birthdayTextBox" Width="215" Canvas.Left="69" Canvas.Top="152" VerticalAlignment="Center"/>
         <Button x:Name="button1" Content="添加" Canvas.Left="33" Canvas.Top="194" Width="75" Click="OnAddHandler"/>
         <Button x:Name="button2" Content="取消" Canvas.Left="209" Canvas.Top="194" Width="75" Click="OnCloseHandler"/>
+        <Image Name="coverImg" Canvas.Left="300"/>
     </Canvas>
 </Window>

@@ -132,7 +132,7 @@ namespace avManager.model
             v.ActressList = new List<ObjectId>();
             v.ClassList = new List<ObjectId>();
             string imgURL = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
-            v.Cover = imgURL;
+            v.ImgUrl = imgURL;
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033ps.jpg
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033pl.jpg
 

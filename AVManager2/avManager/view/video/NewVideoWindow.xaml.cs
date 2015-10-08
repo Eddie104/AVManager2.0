@@ -2,19 +2,9 @@
 using avManager.model.data;
 using libra.web;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AVManager2.avManager.view.video
 {
@@ -47,12 +37,9 @@ namespace AVManager2.avManager.view.video
         private void callback(string html)
         {
             CurrentVideo = VideoManager.GetInstance().CreateVideo(html);
-            //this.nameTextBox.Text = CurrentVideo.Name;
-            //this.birthdayTextBox.Text = v.Date.ToString("YY-MM-DD");
-            Console.WriteLine("name={0}", CurrentVideo.Name);
-
+            this.coverImg.Dispatcher.Invoke(new Action(delegate { this.coverImg.Source = new BitmapImage(new Uri(CurrentVideo.ImgUrl)); }));
             this.nameTextBox.Dispatcher.Invoke(new Action(delegate { this.nameTextBox.Text = CurrentVideo.Name; }));
-            this.birthdayTextBox.Dispatcher.Invoke(new Action(delegate { this.birthdayTextBox.Text = CurrentVideo.Date.ToString("YY-MM-DD"); }));
+            this.birthdayTextBox.Dispatcher.Invoke(new Action(delegate { this.birthdayTextBox.Text = CurrentVideo.Date.ToString("yyyy-MM-dd"); }));
         }
 
         private void OnAddHandler(object sender, RoutedEventArgs e)
