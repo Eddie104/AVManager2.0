@@ -109,12 +109,12 @@ namespace avManager.model.data
                                 }
                                 propertyInfo.SetValue(this, list);
                             }
-                            this.NeedUpdate = true;
+                            //this.NeedUpdate = true;
                         }
-                        else
-                        {
-                            this.NeedUpdate = true;
-                        }
+                        //else
+                        //{
+                        //    this.NeedUpdate = true;
+                        //}
                     }
                 }
             }

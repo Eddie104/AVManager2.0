@@ -4,6 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using AVManager2.avManager.view.actress;
 
 namespace avManager.model
 {
@@ -104,34 +105,10 @@ namespace avManager.model
             return result;
         }
 
-        //public List<Actress> GetActressList(int startIndex, int length)
-        //{
-        //    List<Actress> result = new List<Actress>();
-        //    int endIndex = Math.Min(startIndex + length - 1, this.actressList.Count - 1);
-        //    for (int i = startIndex; i <= endIndex; i++)
-        //    {
-        //        result.Add(this.actressList[i]);
-        //    }
-        //    return result;
-        //}
-
-        //public List<Actress> GetActressList(int minHeight, int maxHeight)
-        //{
-        //    List<Actress> result = new List<Actress>();
-        //    foreach (Actress a in this.actressList)
-        //    {
-        //        if (a.Height >= minHeight && a.Height <= maxHeight)
-        //        {
-        //            result.Add(a);
-        //        }
-        //    }
-        //    return result;
-        //}
-
-        public List<Actress> GetActressList(string nameKeyWord, int minHeight, int maxHeight)
+        public List<Actress> GetActressList(string nameKeyWord, int minHeight, int maxHeight, bool sortByScoreDesc)
         {
             List<Actress> result = new List<Actress>();
-            List<Actress> actressList = string.IsNullOrEmpty(nameKeyWord) ? this.actressList : GetActressList(nameKeyWord);
+            List<Actress> actressList = string.IsNullOrEmpty(nameKeyWord) ? new List<Actress>(this.actressList.ToArray()) : GetActressList(nameKeyWord);
 
             if (maxHeight > minHeight)
             {
@@ -147,6 +124,7 @@ namespace avManager.model
             {
                 result = actressList;
             }
+            result.Sort(new SortByScoreCamparer(sortByScoreDesc));
             return result;
         }
 
@@ -191,6 +169,30 @@ namespace avManager.model
                 instance = new ActressManager();
             }
             return instance;
+        }
+    }
+
+    class SortByScoreCamparer : IComparer<Actress>
+    {
+
+        public bool Desc { get; set; }
+
+        public SortByScoreCamparer(bool desc)
+        {
+            Desc = desc;
+        }
+
+        public int Compare(Actress a, Actress b)
+        {
+            if (a.Score > b.Score)
+            {
+                return Desc ? 1 : -1;
+            }
+            else if (a.Score == b.Score)
+            {
+                return 0;
+            }
+            return Desc ? -1 : 1;
         }
     }
 }

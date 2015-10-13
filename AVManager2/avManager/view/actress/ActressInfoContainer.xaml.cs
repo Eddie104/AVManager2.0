@@ -59,7 +59,9 @@ namespace AVManager2.avManager.view.actress
         private void OnActressInfoClicked(object sender, EventArgs e)
         {
             //Console.WriteLine("a = {0}", (sender as ActressInfo).Actress.Name);
-
+            ActressDetail ad = new ActressDetail();
+            ad.Actress = (sender as ActressInfo).Actress;
+            ad.ShowDialog();
         }
 
         /// <summary>
@@ -82,10 +84,10 @@ namespace AVManager2.avManager.view.actress
             PageChanged(Math.Min(totalPage, curPage + 1));
         }
 
-        private void PageChanged(int newPage)
+        private void PageChanged(int newPage, bool force = false)
         {
             newPage = Math.Max(1, Math.Min(totalPage, newPage));
-            if (newPage != curPage)
+            if (newPage != curPage || force)
             {
                 curPage = newPage;
                 pageLabel.Text = string.Format("{0}/{1}", curPage, totalPage);
@@ -141,17 +143,17 @@ namespace AVManager2.avManager.view.actress
                 int.TryParse(this.maxHeightTextBox.Text, out maxHeight);
                 af.MinHeight = minHeight;
                 af.MaxHeight = maxHeight;
+                af.SortByScoreDesc = sortByScoreComboBox.SelectedIndex == 0;
+
                 this.FilterActress(af);
             }
         }
 
         private void FilterActress(ActressFilter filter)
         {
-            this.actressList = actressManager.GetActressList(filter.NameKeyWord, filter.MinHeight, filter.MaxHeight);
+            this.actressList = actressManager.GetActressList(filter.NameKeyWord, filter.MinHeight, filter.MaxHeight, filter.SortByScoreDesc);
             totalPage = (int)(Math.Ceiling((double)actressList.Count / TOTAL_NUM_PER_PAGE));
-            pageLabel.Text = string.Format("{0}/{1}", curPage, totalPage);
-
-            ShowActressInfo();
+            PageChanged(1, true);
         }
 
         struct ActressFilter
@@ -161,6 +163,8 @@ namespace AVManager2.avManager.view.actress
             public int MinHeight { get; set; }
 
             public int MaxHeight { get; set; }
+
+            public bool SortByScoreDesc { get; set; }
         }
     }
 }
