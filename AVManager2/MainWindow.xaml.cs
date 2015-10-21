@@ -5,15 +5,16 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace AVManager2
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
-
         private ClassTypeManager classTypeManager;
 
         private ActressManager actressManager;
@@ -118,6 +119,12 @@ namespace AVManager2
         private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MongoDBHelper.Exit();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            //await this.ShowMessageAsync("This is the title", "Some message");
+            DialogManager.ShowMessageAsync(this, "This is the title", "Some message");
         }
     }
 }
