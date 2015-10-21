@@ -32,7 +32,7 @@
             </TabItem>
             <TabItem Header="影片">
                 <DockPanel>
-                    <localVideo:VideoInfoContainer/>
+                    <localVideo:VideoInfoContainer x:Name="videoInfoContainer"/>
                 </DockPanel>
             </TabItem>
         </TabControl>

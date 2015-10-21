@@ -8,7 +8,7 @@ namespace AVManager2.avManager
 {
     static class Config
     {
-        public const string IMG_PATH = @"D:\test\avdb\dmmImg\";
+        public const string IMG_PATH = @"H:\avdb\";
 
         public const string ACTRESS_IMG_PATH = IMG_PATH + @"actress\";
 

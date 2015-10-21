@@ -53,7 +53,7 @@ namespace AVManager2.avManager.view.actress
         public void InitActressInfo()
         {
             actressManager = ActressManager.GetInstance();
-            FilterActress(new ActressFilter());
+            FilterActress(new ActressFilter() { SortByScoreDesc = true });
         }
 
         private void OnActressInfoClicked(object sender, EventArgs e)

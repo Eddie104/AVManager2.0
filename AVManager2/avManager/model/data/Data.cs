@@ -16,7 +16,8 @@ namespace avManager.model.data
         Date,
         ObjectIdList,
         IntList,
-        StringList
+        StringList,
+        boolean
     }
 
     class DBAttribute : Attribute
@@ -66,6 +67,10 @@ namespace avManager.model.data
                             {
                                 propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? "" : bsonDocument[dbAttribute.DBField].AsString);
                             }
+                            else if(dbAttribute.DataType == DataType.boolean)
+                            {
+                                propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].AsBoolean);
+                            }
                             else if (dbAttribute.DataType == DataType.Date)
                             {
                                 propertyInfo.SetValue(this, bsonDocument[dbAttribute.DBField].IsBsonNull ? new DateTime(1980, 1, 1) : bsonDocument[dbAttribute.DBField].ToUniversalTime());
@@ -109,12 +114,12 @@ namespace avManager.model.data
                                 }
                                 propertyInfo.SetValue(this, list);
                             }
-                            //this.NeedUpdate = true;
+                            this.NeedUpdate = true;
                         }
-                        //else
-                        //{
-                        //    this.NeedUpdate = true;
-                        //}
+                        else
+                        {
+                            this.NeedUpdate = true;
+                        }
                     }
                 }
             }

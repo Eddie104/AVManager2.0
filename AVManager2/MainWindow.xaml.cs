@@ -37,6 +37,7 @@ namespace AVManager2
             videoManager.Init();
 
             actressInfoContainer.InitActressInfo();
+            videoInfoContainer.InitVideoInfo();
         }
 
         private int t = 11;

@@ -1,5 +1,7 @@
 ﻿using avManager.model;
 using avManager.model.data;
+using libra.log4CSharp;
+using libra.util;
 using libra.web;
 using System;
 using System.Text.RegularExpressions;
@@ -37,9 +39,20 @@ namespace AVManager2.avManager.view.video
         private void callback(string html)
         {
             CurrentVideo = VideoManager.GetInstance().CreateVideo(html);
-            this.coverImg.Dispatcher.Invoke(new Action(delegate { this.coverImg.Source = new BitmapImage(new Uri(CurrentVideo.ImgUrl)); }));
+
+            if (RegularHelper.IsUrl(CurrentVideo.ImgUrl))
+            {
+                this.coverImg.Dispatcher.Invoke(new Action(delegate { this.coverImg.Source = new BitmapImage(new Uri(CurrentVideo.ImgUrl)); }));
+            }
+            else
+            {
+                Logger.Error(string.Format("{0}的封面地址有误:{1}", CurrentVideo.Code, CurrentVideo.ImgUrl));
+            }
+            
             this.nameTextBox.Dispatcher.Invoke(new Action(delegate { this.nameTextBox.Text = CurrentVideo.Name; }));
             this.birthdayTextBox.Dispatcher.Invoke(new Action(delegate { this.birthdayTextBox.Text = CurrentVideo.Date.ToString("yyyy-MM-dd"); }));
+            this.classTypeTextBox.Dispatcher.Invoke(new Action(delegate { this.classTypeTextBox.Text = CurrentVideo.GetClassString(); }));
+            this.actressTextBox.Dispatcher.Invoke(new Action(delegate { this.actressTextBox.Text = CurrentVideo.GetActressString(); }));
         }
 
         private void OnAddHandler(object sender, RoutedEventArgs e)
@@ -47,6 +60,15 @@ namespace AVManager2.avManager.view.video
             if (CurrentVideo != null)
             {
                 VideoManager.GetInstance().AddVideo(CurrentVideo);
+
+                //var a = CurrentVideo.ImgUrl.Split(new char[] { '/' });
+                //ImageHelper.DoGetImage(CurrentVideo.ImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, a[a.Length - 1]));
+                ImageHelper.DoGetImage(CurrentVideo.ImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, CurrentVideo.Code + "l.jpg"));
+
+                //a = CurrentVideo.SubImgUrl.Split(new char[] { '/' });
+                ImageHelper.DoGetImage(CurrentVideo.SubImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, CurrentVideo.Code + "s.jpg"));
+
+                MessageBox.Show("保存成功");
             }
             else
             {

@@ -96,6 +96,24 @@ namespace avManager.model
             return null;
         }
 
+        public List<Video> GetVideoList()
+        {
+            return new List<Video>(this.videoList.ToArray());
+        }
+
+        public List<Video> GetVideoList(ObjectId actressID)
+        {
+            List<Video> list = new List<Video>();
+            foreach (Video v in videoList)
+            {
+                if (v.HasActress(actressID))
+                {
+                    list.Add(v);
+                }
+            }
+            return list;
+        }
+
         public void SaveToDB()
         {
             List<Video> tmp = new List<Video>(videoList.ToArray());
@@ -131,10 +149,9 @@ namespace avManager.model
             v.TorrentList = new List<string>();
             v.ActressList = new List<ObjectId>();
             v.ClassList = new List<ObjectId>();
-            string imgURL = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
-            v.ImgUrl = imgURL;
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033ps.jpg
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033pl.jpg
+            v.ImgUrl = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
 
             string name = Regex.Match(Regex.Match(html, "<div id=\"video_title.*</a></h3>").ToString(), @"[A-Z]+-\d+\s.*</a>").ToString().Replace("</a>", "");
             v.Name = name;

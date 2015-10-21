@@ -20,6 +20,6 @@
         <TextBox x:Name="birthdayTextBox" Width="215" Canvas.Left="69" Canvas.Top="152" VerticalAlignment="Center"/>
         <Button x:Name="button1" Content="添加" Canvas.Left="33" Canvas.Top="194" Width="75" Click="OnAddHandler"/>
         <Button x:Name="button2" Content="取消" Canvas.Left="209" Canvas.Top="194" Width="75" Click="OnCloseHandler"/>
-        <Image Name="coverImg" Canvas.Left="300"/>
+        <Image Name="coverImg" Canvas.Left="300" Width="800" Height="536"/>
     </Canvas>
 </Window>

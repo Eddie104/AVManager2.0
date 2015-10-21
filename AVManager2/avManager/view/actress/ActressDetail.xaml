@@ -5,35 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVManager2.avManager.view.actress"
         mc:Ignorable="d"
-        Title="ActressDetail" Height="600" Width="1000" WindowStartupLocation="CenterOwner">
-    <WrapPanel>
-        <Grid>
-            <DockPanel LastChildFill="False">
-                <Image Name="headImg" DockPanel.Dock="Top" Width="125" Height="125"/>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <Label Content="评分" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
-                    <ComboBox Name="scoreComboBox" DockPanel.Dock="Right" SelectionChanged="scoreComboBox_SelectionChanged">
-                        <ComboBoxItem Content="战5渣"/>
-                        <ComboBoxItem Content="一般般"/>
-                        <ComboBoxItem Content="推荐"/>
-                        <ComboBoxItem Content="女神"/>
-                        <ComboBoxItem Content="殿堂女神"/>
-                    </ComboBox>
-                </DockPanel>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <TextBlock Name="waistLabel" Text="腰围:60" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
-                    <TextBlock Name="hipLabel" Text="臀围:90" DockPanel.Dock="Right" TextAlignment="Right" Margin="5, 0, 0, 0"/>
-                </DockPanel>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <TextBlock Name="bustLabel" Text="胸围:90" DockPanel.Dock="Left" TextAlignment="Left" Margin="5, 0, 0, 0"/>
-                    <TextBlock Name="cupLabel" Text="罩杯:C" DockPanel.Dock="Right" TextAlignment="Right" Margin="5, 0, 0, 0"/>
-                </DockPanel>
-                <DockPanel DockPanel.Dock="Bottom">
-                    <TextBlock Name="ageLabel" Text="年龄:24" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
-                    <TextBlock Name="heightLabel" Text="身高:160cm" DockPanel.Dock="Right" TextAlignment="Right" Margin="0, 0, 5, 0"/>
-                </DockPanel>
-                <TextBlock DockPanel.Dock="Bottom" Name="nameLabel" Text="齐天大圣孙悟空" TextAlignment="Center" FontWeight="Bold"/>
+        Title="ActressDetail" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+    <!--xmlns:localVideo="clr-namespace:AVManager2.avManager.view.video"-->
+    <WrapPanel Name="videoContainer">
+        <DockPanel LastChildFill="False" Width="147" Height="255" Margin="5, 1, 1, 1">
+            <Image Name="headImg" DockPanel.Dock="Top" Width="125" Height="125" Margin="0, 10, 0, 0"/>
+            <DockPanel DockPanel.Dock="Bottom">
+                <Label Content="评分" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
+                <ComboBox Name="scoreComboBox" DockPanel.Dock="Right" SelectionChanged="scoreComboBox_SelectionChanged">
+                    <ComboBoxItem Content="战5渣"/>
+                    <ComboBoxItem Content="一般般"/>
+                    <ComboBoxItem Content="推荐"/>
+                    <ComboBoxItem Content="女神"/>
+                    <ComboBoxItem Content="殿堂女神"/>
+                </ComboBox>
             </DockPanel>
-        </Grid>
+            <DockPanel DockPanel.Dock="Bottom">
+                <TextBlock Name="waistLabel" Text="W:60" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
+                <TextBlock Name="hipLabel" Text="H:90" DockPanel.Dock="Right" TextAlignment="Right" Margin="5, 0, 0, 0"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom">
+                <TextBlock Name="bustLabel" Text="B:90" DockPanel.Dock="Left" TextAlignment="Left" Margin="5, 0, 0, 0"/>
+                <TextBlock Name="cupLabel" Text="C:C" DockPanel.Dock="Right" TextAlignment="Right" Margin="5, 0, 0, 0"/>
+            </DockPanel>
+            <DockPanel DockPanel.Dock="Bottom">
+                <TextBlock Name="ageLabel" Text="年龄:24" DockPanel.Dock="Left" Margin="5, 0, 0, 0"/>
+                <TextBlock Name="heightLabel" Text="身高:160cm" DockPanel.Dock="Right" TextAlignment="Right" Margin="0, 0, 5, 0"/>
+            </DockPanel>
+            <TextBlock DockPanel.Dock="Bottom" Name="aliasLabel" Text="齐天大圣孙悟空" TextAlignment="Center" FontWeight="Bold"/>
+            <TextBlock DockPanel.Dock="Bottom" Name="nameLabel" Text="齐天大圣孙悟空" TextAlignment="Center" FontWeight="Bold" FontSize="16"/>
+        </DockPanel>
+        <!--<localVideo:VideoInfo/>-->
     </WrapPanel>
 </Window>

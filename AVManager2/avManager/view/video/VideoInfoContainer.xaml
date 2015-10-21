@@ -8,7 +8,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
-            <Button Content="添加" Click="OnShowNewVideoWindow"/>
+            <Button DockPanel.Dock="Left" Content="添加" Click="OnShowNewVideoWindow"/>
+            <Button DockPanel.Dock="Right" Content="下一页"/>
+            <Label Name="pageLabel" DockPanel.Dock="Right" Content="0/0"/>
+            <Button DockPanel.Dock="Right" Content="上一页"/>
         </DockPanel>
         <ScrollViewer>
             <WrapPanel Name="videoInfoContainer"/>

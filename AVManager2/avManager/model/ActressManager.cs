@@ -186,13 +186,13 @@ namespace avManager.model
         {
             if (a.Score > b.Score)
             {
-                return Desc ? 1 : -1;
+                return Desc ? -1 : 1;
             }
             else if (a.Score == b.Score)
             {
                 return 0;
             }
-            return Desc ? -1 : 1;
+            return Desc ? 1 : -1;
         }
     }
 }
