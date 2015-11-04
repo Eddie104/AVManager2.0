@@ -1,21 +1,13 @@
-﻿using System;
+﻿using avManager.model;
+using avManager.model.data;
+using AVManager2.avManager.view.video;
+using Libra.log4CSharp;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using avManager.model.data;
-using System.IO;
-using libra.log4CSharp;
-using avManager.model;
-using AVManager2.avManager.view.video;
 
 namespace AVManager2.avManager.view.actress
 {
