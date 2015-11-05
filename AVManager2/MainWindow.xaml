@@ -10,7 +10,7 @@
         Title="MainWindow"
         Height="800"
         Width="1224"
-        Closing="OnClosing">
+        Closing="OnClosing" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
             <Button Content="settings" Click="Button_Click_1" />
@@ -94,29 +94,23 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <DockPanel>
-        <Menu DockPanel.Dock="Top"
-                  Margin="5"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Left">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition/>
+            <RowDefinition Height="AUTO"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" Margin="5" VerticalAlignment="Stretch" HorizontalAlignment="Left">
             <MenuItem Header="文件(_F)" ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}">
                 <MenuItem Header="打开(_O)"/>
                 <Separator/>
                 <MenuItem Header="退出(_E)"/>
             </MenuItem>
             <MenuItem Header="还没做" ItemContainerStyle="{StaticResource AccentColorMenuItemStyle}">
-                
+
             </MenuItem>
         </Menu>
-        <StatusBar DockPanel.Dock="Bottom" Width="Auto">
-            <TextBlock Text="dd"></TextBlock>
-            <Button x:Name="button1" Content="添加" Canvas.Left="43" Canvas.Top="62" Width="75" Click="button_Click"/>
-            <Button x:Name="button2" Content="修改" Canvas.Left="159" Canvas.Top="62" Width="75" Click="button2_Click"/>
-            <Button x:Name="button3" Content="清空" Canvas.Left="268" Canvas.Top="67" Width="75" Click="button3_Click"/>
-            <Button x:Name="button4" Content="存数据库" Canvas.Left="399" Canvas.Top="62" Width="75" Click="button4_Click"/>
-            <Button x:Name="button5" Content="测试" Canvas.Left="499" Canvas.Top="62" Width="75" Click="button5_Click"/>
-        </StatusBar>
-        <controls:MetroAnimatedTabControl>
+        <controls:MetroAnimatedTabControl Grid.Row="1">
             <controls:MetroTabItem Header="演员">
                 <DockPanel>
                     <local:ActressInfoContainer x:Name="actressInfoContainer"/>
@@ -128,5 +122,13 @@
                 </DockPanel>
             </controls:MetroTabItem>
         </controls:MetroAnimatedTabControl>
-    </DockPanel>
+        <StatusBar Grid.Row="2" Width="Auto">
+            <TextBlock Text="dd"></TextBlock>
+            <Button x:Name="button1" Content="添加" Canvas.Left="43" Canvas.Top="62" Width="75" Click="button_Click"/>
+            <Button x:Name="button2" Content="修改" Canvas.Left="159" Canvas.Top="62" Width="75" Click="button2_Click"/>
+            <Button x:Name="button3" Content="清空" Canvas.Left="268" Canvas.Top="67" Width="75" Click="button3_Click"/>
+            <Button x:Name="button4" Content="存数据库" Canvas.Left="399" Canvas.Top="62" Width="75" Click="button4_Click"/>
+            <Button x:Name="button5" Content="测试" Canvas.Left="499" Canvas.Top="62" Width="75" Click="button5_Click"/>
+        </StatusBar>
+    </Grid>
 </controls:MetroWindow>

@@ -17,7 +17,7 @@ namespace AVManager2.avManager.view.actress
 
         private ActressManager actressManager;
 
-        private const int TOTAL_NUM_PER_PAGE = 36;
+        private const int TOTAL_NUM_PER_PAGE = 44;
 
         private int curPage = 1;
 
