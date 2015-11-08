@@ -18,6 +18,8 @@ namespace AVManager2.avManager.view.video
             InitializeComponent();
         }
 
+        public event EventHandler Click;
+
         private Video video;
 
         public Video Video
@@ -34,7 +36,7 @@ namespace AVManager2.avManager.view.video
                 {
                     this.Visibility = Visibility.Visible;
 
-                    string imgPath = string.Format("{0}{1}\\{2}s.jpg", Config.VIDEO_IMG_PATH, video.Code, video.Code);
+                    string imgPath = string.Format("{0}{1}\\{2}s.jpg", Config.VIDEO_PATH, video.Code, video.Code);
                     if (File.Exists(imgPath))
                     {
                         BitmapImage bitmap = new BitmapImage(new Uri(imgPath));
@@ -50,6 +52,25 @@ namespace AVManager2.avManager.view.video
                     codeLabel.Content = video.Code;
                 }
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Click != null)
+            {
+                Click(this, e);
+            }
+            e.Handled = false;
+        }
+
+        internal bool UpdateVideo(Video v)
+        {
+            if (Video.Code == v.Code)
+            {
+                Video = v;
+                return true;
+            }
+            return false;
         }
     }
 }

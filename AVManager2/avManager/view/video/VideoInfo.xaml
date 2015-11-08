@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:AVManager2.avManager.view.video"
              mc:Ignorable="d" 
              d:DesignHeight="255" d:DesignWidth="147">
-    <Button Background="White" Margin="1, 1, 1, 1">
+    <Button Background="White" Margin="1, 1, 1, 1" Click="Button_Click">
         <DockPanel LastChildFill="False" Width="147" Height="auto">
             <Image Name="subCoverImg" Width="147" Height="200" DockPanel.Dock="Top"/>
             <Label Name="nameLabel" Content="SGA-030" DockPanel.Dock="Bottom" HorizontalAlignment="Center"/>

@@ -20,7 +20,7 @@ namespace AVManager2.avManager.view.video
     /// <summary>
     /// VideoInfoContainer.xaml 的交互逻辑
     /// </summary>
-    public partial class VideoInfoContainer : UserControl
+    public partial class VideoInfoContainer : Grid
     {
 
         private const int TOTAL_NUM_PER_PAGE = 36;
@@ -45,7 +45,27 @@ namespace AVManager2.avManager.view.video
                 info = new VideoInfo();
                 this.videoInfoContainer.Children.Add(info);
                 videoInfoList.Add(info);
-                //info.Click += OnActressInfoClicked;
+                info.Click += OnVideoInfoClicked;
+            }
+        }
+
+        private void OnVideoInfoClicked(object sender, EventArgs e)
+        {
+            VideoDetail ad = new VideoDetail();
+            ad.UpdateHandler += OnUpdateHandler;
+            ad.Video = (sender as VideoInfo).Video;
+            ad.ShowDialog();
+        }
+
+        private void OnUpdateHandler(object sender, EventArgs e)
+        {
+            Video v = sender as Video;
+            foreach (var item in videoInfoList)
+            {
+                if (item.UpdateVideo(v))
+                {
+                    break;
+                }
             }
         }
 

@@ -1,9 +1,12 @@
 ﻿using avManager.model.data;
+using AVManager2.avManager;
 using libra.db.mongoDB;
+using Libra.helper;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace avManager.model
@@ -29,11 +32,16 @@ namespace avManager.model
                 foreach (BsonDocument doc in list)
                     this.videoList.Add(new Video(doc));
             }
-        }
 
-        public Video AddVideo(string name)
-        {
-            return this.AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), name));
+            //看看目录下有哪些是数据库里没有的影片，也都加进来
+            DirectoryInfo dirInfo = new DirectoryInfo(Config.VIDEO_PATH);
+            foreach (DirectoryInfo d in dirInfo.GetDirectories())
+            {
+                if (GetVideo(d.Name) == null)
+                {
+                    AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), d.Name));
+                }
+            }
         }
 
         public Video AddVideo(Video v)
@@ -143,12 +151,12 @@ namespace avManager.model
             }
         }
 
-        public Video CreateVideo(string html)
+        public Video CreateVideo(string html, Video v = null)
         {
-            Video v = new Video();
-            v.TorrentList = new List<string>();
-            v.ActressList = new List<ObjectId>();
-            v.ClassList = new List<ObjectId>();
+            if (v == null)
+            {
+                v = new Video();
+            }
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033ps.jpg
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033pl.jpg
             v.ImgUrl = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();

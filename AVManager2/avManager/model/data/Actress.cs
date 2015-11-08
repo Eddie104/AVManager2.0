@@ -75,6 +75,7 @@ namespace avManager.model.data
             Waist = waist;
             Hip = hip;
             Cup = cup;
+            NeedInsert = true;
         }
 
     }

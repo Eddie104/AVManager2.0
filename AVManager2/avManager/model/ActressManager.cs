@@ -34,8 +34,7 @@ namespace avManager.model
         public Actress AddActress(string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup)
         {
             Actress a = new Actress(new ObjectId(ObjectIdGenerator.Generate()), name, alias, birthday, height, bust, waist, hip, cup);
-            this.actressList.Add(a);
-            a.NeedInsert = true;
+            actressList.Add(a);
             return a;
         }
 

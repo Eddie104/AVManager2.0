@@ -74,11 +74,34 @@ namespace avManager.model.data
             }
         }
 
-        public Video(BsonDocument bsonDocument) : base(bsonDocument) { }
+        public Video(BsonDocument bsonDocument) : base(bsonDocument) { Init(); }
 
-        public Video(ObjectId id, string name) : base(id, name) { }
+        public Video() { Init(); }
 
-        public Video() { }
+        public Video(ObjectId id, string code)
+        {
+            ID = id;
+            Code = code;
+            NeedInsert = true;
+
+            Init();
+        }
+
+        private void Init()
+        {
+            if (ActressList == null)
+            {
+                ActressList = new List<ObjectId>();
+            }
+            if (ClassList == null)
+            {
+                ClassList = new List<ObjectId>();
+            }
+            if (TorrentList == null)
+            {
+                TorrentList = new List<string>();
+            }
+        }
 
         public string GetClassString()
         {

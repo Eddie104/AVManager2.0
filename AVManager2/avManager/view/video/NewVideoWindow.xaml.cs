@@ -60,14 +60,8 @@ namespace AVManager2.avManager.view.video
             if (CurrentVideo != null)
             {
                 VideoManager.GetInstance().AddVideo(CurrentVideo);
-
-                //var a = CurrentVideo.ImgUrl.Split(new char[] { '/' });
-                //ImageHelper.DoGetImage(CurrentVideo.ImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, a[a.Length - 1]));
-                ImageHelper.DoGetImage(CurrentVideo.ImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, CurrentVideo.Code + "l.jpg"));
-
-                //a = CurrentVideo.SubImgUrl.Split(new char[] { '/' });
-                ImageHelper.DoGetImage(CurrentVideo.SubImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_IMG_PATH, CurrentVideo.Code, CurrentVideo.Code + "s.jpg"));
-
+                ImageHelper.DoGetImage(CurrentVideo.ImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_PATH, CurrentVideo.Code, CurrentVideo.Code + "l.jpg"));
+                ImageHelper.DoGetImage(CurrentVideo.SubImgUrl, string.Format("{0}{1}\\{2}", Config.VIDEO_PATH, CurrentVideo.Code, CurrentVideo.Code + "s.jpg"));
                 MessageBox.Show("保存成功");
             }
             else

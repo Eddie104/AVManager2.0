@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="AVManager2.avManager.view.video.VideoInfoContainer"
+﻿<Grid x:Class="AVManager2.avManager.view.video.VideoInfoContainer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,15 +6,25 @@
              xmlns:local="clr-namespace:AVManager2.avManager.view.video"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <DockPanel>
-        <DockPanel DockPanel.Dock="Top" LastChildFill="False">
-            <Button DockPanel.Dock="Left" Content="添加" Click="OnShowNewVideoWindow"/>
-            <Button DockPanel.Dock="Right" Content="下一页"/>
-            <Label Name="pageLabel" DockPanel.Dock="Right" Content="0/0"/>
-            <Button DockPanel.Dock="Right" Content="上一页"/>
-        </DockPanel>
-        <ScrollViewer>
-            <WrapPanel Name="videoInfoContainer"/>
-        </ScrollViewer>
-    </DockPanel>
-</UserControl>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
+        <RowDefinition/>
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="AUTO"/>
+        </Grid.ColumnDefinitions>
+        <ToolBar Grid.Column="0">
+            <Button Content="添加" Click="OnShowNewVideoWindow"/>
+        </ToolBar>
+        <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <Button Content="下一页"/>
+            <Label Name="pageLabel" Content="0/0"/>
+            <Button Content="上一页"/>
+        </StackPanel>
+    </Grid>
+    <ScrollViewer Grid.Row="1">
+        <WrapPanel Name="videoInfoContainer"/>
+    </ScrollViewer>
+</Grid>

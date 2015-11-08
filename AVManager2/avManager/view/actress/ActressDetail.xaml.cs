@@ -41,7 +41,7 @@ namespace AVManager2.avManager.view.actress
                 cupLabel.Text = string.Format("罩杯:{0}", actress.Cup);
                 scoreComboBox.SelectedIndex = actress.Score;
 
-                string imgPath = string.Format("{0}{1}.jpg", Config.ACTRESS_IMG_PATH, actress.Code);
+                string imgPath = string.Format("{0}{1}.jpg", Config.ACTRESS_PATH, actress.Code);
                 if (File.Exists(imgPath))
                 {
                     headImg.Source = new BitmapImage(new Uri(imgPath));
