@@ -47,6 +47,7 @@ namespace AVManager2.avManager.view.video
                     else
                     {
                         Logger.Error(string.Format("影片图片:{0}不存在", imgPath));
+                        subCoverImg.Source = null;
                     }
                     nameLabel.Content = video.Name;
                     codeLabel.Content = video.Code;

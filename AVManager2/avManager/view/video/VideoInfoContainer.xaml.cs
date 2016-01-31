@@ -90,6 +90,26 @@ namespace AVManager2.avManager.view.video
             }
         }
 
+        /// <summary>
+        /// 上一页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnPrevPageHander(object sender, RoutedEventArgs e)
+        {
+            PageChanged(Math.Max(1, curPage - 1));
+        }
+
+        /// <summary>
+        /// 下一页
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnNextPageHandler(object sender, RoutedEventArgs e)
+        {
+            PageChanged(Math.Min(totalPage, curPage + 1));
+        }
+
         private void ShowVideoInfo()
         {
             int startIndex = (curPage - 1) * TOTAL_NUM_PER_PAGE;
@@ -109,6 +129,21 @@ namespace AVManager2.avManager.view.video
         {
             NewVideoWindow newVideoWindow = new NewVideoWindow();
             newVideoWindow.ShowDialog();
+        }
+
+        private void onSortChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.IsInitialized)
+            {
+                SortType st = SortType.VideoBirthday;
+                if((sender as ComboBox).SelectedIndex == 1)
+                {
+                    st = SortType.VideoCode;
+                }
+               this.videoList = VideoManager.GetInstance().GetVideoList(st);
+                totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
+                PageChanged(1, true);
+            }
         }
     }
 }

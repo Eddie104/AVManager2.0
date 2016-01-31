@@ -157,5 +157,11 @@ namespace AVManager2.avManager.view.actress
 
             public bool SortByScoreDesc { get; set; }
         }
+
+        private void OnShowCreateActress(object sender, RoutedEventArgs e)
+        {
+            CreateActress win = new CreateActress();
+            win.ShowDialog();
+        }
     }
 }

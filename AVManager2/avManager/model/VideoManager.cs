@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Windows;
 
 namespace avManager.model
 {
@@ -104,9 +105,17 @@ namespace avManager.model
             return null;
         }
 
-        public List<Video> GetVideoList()
+        public List<Video> GetVideoList(SortType sortType = SortType.VideoBirthday, bool desc = false)
         {
-            return new List<Video>(this.videoList.ToArray());
+            var list = new List<Video>(this.videoList.ToArray());
+            if(sortType == SortType.VideoCode)
+            {
+                list.Sort(new SortByVideoCodeCamparer(desc));
+            }else if(sortType == SortType.VideoBirthday)
+            {
+                list.Sort(new SortByVideoCodeBirthday(desc));
+            }
+            return list;
         }
 
         public List<Video> GetVideoList(ObjectId actressID)
@@ -151,7 +160,16 @@ namespace avManager.model
             }
         }
 
-        public Video CreateVideo(string html, Video v = null)
+        //public Video CreateVideoFromJav(string html, string code, Video v = null)
+        //{
+        //    if (v == null)
+        //    {
+        //        v = new Video();
+        //    }
+
+        //}
+
+        public Video CreateVideo(string html, string code, Video v = null)
         {
             if (v == null)
             {
@@ -187,20 +205,43 @@ namespace avManager.model
                     var classList = regA.Matches(tdList[i + 1].ToString());
                     foreach (var classItem in classList)
                     {
-                        v.ClassList.Add(ClassTypeManager.GetInstance().GetClassType(regPlace.Replace(classItem.ToString(), "").Replace("</a>", "")).ID);
+                        ClassType classType = ClassTypeManager.GetInstance().GetClassType(regPlace.Replace(classItem.ToString(), "").Replace("</a>", ""));
+                        if(!v.ClassList.Contains(classType.ID))
+                            v.ClassList.Add(classType.ID);
                     }
                 }
                 else if (item.Contains("演员"))
                 {
                     Actress a;
                     Regex regPlace = new Regex("<a href=\"vl_star.php\\?s=\\w+\" rel=\"tag\">");
+                    //{<td class="text"><span id="cast3564" class="cast"><span class="star"><a href="vl_star.php?s=o45a" rel="tag">川上优</a></span> <span id="alias3680" class="alias">森野雫</span> <span id="star_o45a" class="icn_favstar" title="将这演员加入我最爱的演员名单。"></span></span></td>}
+
                     var classList = regA.Matches(tdList[i + 1].ToString());
+                    string actressName = null;
                     foreach (var classItem in classList)
                     {
-                        a = ActressManager.GetInstance().GetActress(regPlace.Replace(classItem.ToString(), "").Replace("</a>", ""));
+                        actressName = regPlace.Replace(classItem.ToString(), "").Replace("</a>", "");
+                        a = ActressManager.GetInstance().GetActress(actressName, true);
                         if (a != null)
                         {
-                            v.ActressList.Add(a.ID);
+                            if(!v.ActressList.Contains(a.ID))
+                                v.ActressList.Add(a.ID);
+                        }
+                        //else
+                        //{
+                        //    a = ActressManager.GetInstance().AddActress(actressName, "", new DateTime(), 0, 0, 0, 0, "X");
+                        //    v.ActressList.Add(a.ID);
+                        //}
+                    }
+                    var regAlias = new Regex("class=\"alias\">\\w+</span>");
+                    classList = regAlias.Matches(tdList[i + 1].ToString());
+                    foreach (var classItem in classList)
+                    {
+                        a = ActressManager.GetInstance().GetActress(classItem.ToString().Replace("</span>", "").Replace("class=\"alias\">", ""), true);
+                        if (a != null)
+                        {
+                            if (!v.ActressList.Contains(a.ID))
+                                v.ActressList.Add(a.ID);
                         }
                     }
                 }
@@ -221,5 +262,42 @@ namespace avManager.model
             }
             return instance;
         }
+    }
+
+    class SortByVideoCodeCamparer : IComparer<Video>
+    {
+
+        public bool Desc { get; set; }
+
+        public SortByVideoCodeCamparer(bool desc)
+        {
+            Desc = desc;
+        }
+
+        public int Compare(Video a, Video b)
+        {
+            return Desc ? b.Code.CompareTo(a.Code) : a.Code.CompareTo(b.Code);
+        }
+    }
+
+    class SortByVideoCodeBirthday : IComparer<Video>
+    {
+
+        public bool Desc { get; set; }
+
+        public SortByVideoCodeBirthday(bool desc)
+        {
+            Desc = desc;
+        }
+
+        public int Compare(Video a, Video b)
+        {
+            return Desc ? b.Date.CompareTo(a.Date) : a.Date.CompareTo(b.Date);
+        }
+    }
+
+    enum SortType {
+        VideoCode,
+        VideoBirthday
     }
 }

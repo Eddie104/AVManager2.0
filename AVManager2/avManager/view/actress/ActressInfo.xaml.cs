@@ -53,6 +53,7 @@ namespace AVManager2.avManager.view.actress
                     else
                     {
                         Logger.Error(string.Format("图片:{0}.jpg不存在", actress.Code));
+                        headImg.Source = null;
                     }
 
                     //actress.Score

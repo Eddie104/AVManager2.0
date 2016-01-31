@@ -64,7 +64,7 @@ namespace avManager.model.data
 
         public Actress(BsonDocument bsonDocument) : base(bsonDocument) { }
 
-        public Actress(ObjectId id, string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup)
+        public Actress(ObjectId id, string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup, string code)
         {
             ID = id;
             Name = name;
@@ -75,6 +75,7 @@ namespace avManager.model.data
             Waist = waist;
             Hip = hip;
             Cup = cup;
+            Code = code;
             NeedInsert = true;
         }
 

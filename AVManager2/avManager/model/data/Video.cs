@@ -120,7 +120,7 @@ namespace avManager.model.data
             string s = "";
             foreach (ObjectId actressID in ActressList)
             {
-                s += m.GetActress(actressID).Name + "";
+                s += m.GetActress(actressID).Name + " ";
             }
             return s;
         }

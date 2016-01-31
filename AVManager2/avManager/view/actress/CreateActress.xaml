@@ -1,12 +1,66 @@
-﻿<Window x:Class="AVManager2.avManager.view.actress.CreateActress"
+﻿<controls:MetroWindow x:Class="AVManager2.avManager.view.actress.CreateActress"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AVManager2.avManager.view.actress"
+        xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
-        Title="添加演员" Height="300" Width="300">
+        Title="添加演员" Height="380" Width="300">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="AUTO"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0">
+            <Label Content="姓名:"/>
+            <TextBox Width="200" Name="nameTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="1">
+            <Label Content="别名:"/>
+            <TextBox Width="200" Name="aliasTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="2">
+            <Label Content="生日:"/>
+            <TextBox Width="200" Name="birthdayTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="3">
+            <Label Content="胸围:"/>
+            <TextBox Width="200" Name="bustTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="4">
+            <Label Content="腰围:"/>
+            <TextBox Width="200" Name="waistTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="5">
+            <Label Content="臀围:"/>
+            <TextBox Width="200" Name="hipTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="6">
+            <Label Content="罩杯:"/>
+            <TextBox Width="200" Name="cupTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="7">
+            <Label Content="头像:"/>
+            <TextBox Width="200" Name="codeTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="8">
+            <Label Content="身高:"/>
+            <TextBox Width="200" Name="heightTextBox"/>
+        </WrapPanel>
+        <WrapPanel Grid.Row="9">
+            <Label Content="评分:"/>
+            <TextBox Width="200" Name="scoreTextBox"/>
+        </WrapPanel>
+        <Button Grid.Row="10" Content="添加" Click="onCreateActress"/>
     </Grid>
-</Window>
+</controls:MetroWindow>

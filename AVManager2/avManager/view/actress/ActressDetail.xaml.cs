@@ -2,6 +2,7 @@
 using avManager.model.data;
 using AVManager2.avManager.view.video;
 using Libra.log4CSharp;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,7 +15,7 @@ namespace AVManager2.avManager.view.actress
     /// <summary>
     /// ActressDetail.xaml 的交互逻辑
     /// </summary>
-    public partial class ActressDetail : Window
+    public partial class ActressDetail : MetroWindow
     {
 
         private const int TOTAL_NUM_PER_PAGE = 11;
@@ -109,6 +110,18 @@ namespace AVManager2.avManager.view.actress
         {
             this.Actress.Score = (sender as ComboBox).SelectedIndex;
             this.Actress.NeedUpdate = true;
+        }
+
+        private void aliasLabel_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Actress.Alias = (sender as TextBox).Text;
+            Actress.NeedUpdate = true;
+        }
+
+        private void nameLabel_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Actress.Name = (sender as TextBox).Text;
+            Actress.NeedUpdate = true;
         }
     }
 }

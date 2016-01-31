@@ -31,9 +31,9 @@ namespace avManager.model
             }
         }
 
-        public Actress AddActress(string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup)
+        public Actress AddActress(string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup, string code)
         {
-            Actress a = new Actress(new ObjectId(ObjectIdGenerator.Generate()), name, alias, birthday, height, bust, waist, hip, cup);
+            Actress a = new Actress(new ObjectId(ObjectIdGenerator.Generate()), name, alias, birthday, height, bust, waist, hip, cup, code);
             actressList.Add(a);
             return a;
         }
@@ -73,13 +73,25 @@ namespace avManager.model
             return null;
         }
 
-        public Actress GetActress(string name)
+        public Actress GetActress(string name, bool mathAll = false)
         {
             foreach (Actress actress in actressList)
             {
-                if (actress.Name.Contains(name) || actress.Alias.Contains(name))
+                if (mathAll)
                 {
-                    return actress;
+                    if (actress.Name == name) return actress;
+                    var a = actress.Alias.Split(new char[] { '|' });
+                    foreach(string s in a)
+                    {
+                        if (s == name) return actress;
+                    }
+                }
+                else
+                {
+                    if (actress.Name.Contains(name) || actress.Alias.Contains(name))
+                    {
+                        return actress;
+                    }
                 }
             }
             return null;

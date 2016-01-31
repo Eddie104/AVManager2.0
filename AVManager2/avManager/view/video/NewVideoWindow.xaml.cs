@@ -18,6 +18,8 @@ namespace AVManager2.avManager.view.video
 
         public Video CurrentVideo { get; set; }
 
+        private string code;
+
         public NewVideoWindow()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace AVManager2.avManager.view.video
 
         private void OnSearchVideoInfo(object sender, RoutedEventArgs e)
         {
-            string code = this.codeTextBox.Text.ToUpper();
+            code = this.codeTextBox.Text.ToUpper();
             if (Regex.IsMatch(code, @"[A-Z]+-[0-9]+"))
             {
                 HTMLHelper.GetInstance().GetHtml(string.Format("http://www.javlibrary.com/cn/vl_searchbyid.php?keyword={0}", code), this.callback);
@@ -38,21 +40,41 @@ namespace AVManager2.avManager.view.video
 
         private void callback(string html)
         {
-            CurrentVideo = VideoManager.GetInstance().CreateVideo(html);
-
-            if (RegularHelper.IsUrl(CurrentVideo.ImgUrl))
+            if (html.Contains("识别码搜寻结果"))
             {
-                this.coverImg.Dispatcher.Invoke(new Action(delegate { this.coverImg.Source = new BitmapImage(new Uri(CurrentVideo.ImgUrl)); }));
+                //<div class="video" id="vid_javlio354y"><a href="./?v=javlio354y" title="ABP-001 水咲ローラがご奉仕しちゃう超最新やみつきエステ"><div class="id">ABP-001</div>
+                //http://www.javlibrary.com/cn/?v=javlio354y
+                Regex regVideo = new Regex("<div class=\"video\".*" + code + "</div>");
+                var videoItem = regVideo.Match(html);
+                if (!string.IsNullOrEmpty(videoItem.Value))
+                {
+                    var m = new Regex("<a href=.* title=").Match(videoItem.Value);
+                    var t = m.Value.Replace("\"", "").Replace("<a href=./", "").Replace(" title=", "");
+                    HTMLHelper.GetInstance().GetHtml(string.Format("http://www.javlibrary.com/cn/{0}", t), this.callback);
+                }
+                else
+                {
+                    MessageBox.Show("找不到影片信息:" + code);
+                }
             }
             else
             {
-                Logger.Error(string.Format("{0}的封面地址有误:{1}", CurrentVideo.Code, CurrentVideo.ImgUrl));
+                CurrentVideo = VideoManager.GetInstance().CreateVideo(html, code);
+
+                if (RegularHelper.IsUrl(CurrentVideo.ImgUrl))
+                {
+                    this.coverImg.Dispatcher.Invoke(new Action(delegate { this.coverImg.Source = new BitmapImage(new Uri(CurrentVideo.ImgUrl)); }));
+                }
+                else
+                {
+                    Logger.Error(string.Format("{0}的封面地址有误:{1}", CurrentVideo.Code, CurrentVideo.ImgUrl));
+                }
+
+                this.nameTextBox.Dispatcher.Invoke(new Action(delegate { this.nameTextBox.Text = CurrentVideo.Name; }));
+                this.birthdayTextBox.Dispatcher.Invoke(new Action(delegate { this.birthdayTextBox.Text = CurrentVideo.Date.ToString("yyyy-MM-dd"); }));
+                this.classTypeTextBox.Dispatcher.Invoke(new Action(delegate { this.classTypeTextBox.Text = CurrentVideo.GetClassString(); }));
+                this.actressTextBox.Dispatcher.Invoke(new Action(delegate { this.actressTextBox.Text = CurrentVideo.GetActressString(); }));
             }
-            
-            this.nameTextBox.Dispatcher.Invoke(new Action(delegate { this.nameTextBox.Text = CurrentVideo.Name; }));
-            this.birthdayTextBox.Dispatcher.Invoke(new Action(delegate { this.birthdayTextBox.Text = CurrentVideo.Date.ToString("yyyy-MM-dd"); }));
-            this.classTypeTextBox.Dispatcher.Invoke(new Action(delegate { this.classTypeTextBox.Text = CurrentVideo.GetClassString(); }));
-            this.actressTextBox.Dispatcher.Invoke(new Action(delegate { this.actressTextBox.Text = CurrentVideo.GetActressString(); }));
         }
 
         private void OnAddHandler(object sender, RoutedEventArgs e)

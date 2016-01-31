@@ -13,7 +13,7 @@
             <TextBox Name="pageLabel" Width="38" DockPanel.Dock="Right" Margin="10, 0, 10, 0" Text="1" TextAlignment="Center" VerticalAlignment="Center"/>
             <!--<controls:NumericUpDown StringFormat="{}{0}" DockPanel.Dock="Right" Minimum = "0" Maximum = "100" Interval = "1" Name="pageNumeric" ValueChanged="pageNumeric_ValueChanged"/>-->
             <Button Content="上一页" DockPanel.Dock="Right" Click="OnPrevPageHander"/>
-            <Button Content="新  建" DockPanel.Dock="Right" Margin="0, 0, 5, 0"/>
+            <Button Content="新  建" DockPanel.Dock="Right" Margin="0, 0, 5, 0" Click="OnShowCreateActress"/>
             <Label Content="名字关键字:"/>
             <TextBox Name="nameKeyWordTextBox" Width="60" VerticalAlignment="Center" TextChanged="OnFilterActressInfo"/>
             <Label Content="身高区间"/>

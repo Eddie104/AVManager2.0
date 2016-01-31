@@ -9,10 +9,43 @@
         Title="VideoDetail" Height="600" Width="1000" WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="800"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Column="0" Name="img"/>
-        <Button Content="更新" Grid.Column="1" Click="OnUpdateVideo"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Name="nameLabel"/>
+            <Image Grid.Row="1" Name="img"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition Height="AUTO"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <WrapPanel Grid.Row="0">
+                <Label Content="识别码:"/>
+                <Label Name="codeLabel"/>
+            </WrapPanel>
+            <WrapPanel Grid.Row="1">
+                <Label Content="发行日期:"/>
+                <Label Name="dateLabel"/>
+            </WrapPanel>
+            <WrapPanel Grid.Row="2">
+                <Label Content="类别:"/>
+                <Label Name="classLabel"/>
+            </WrapPanel>
+            <WrapPanel Grid.Row="3" Name="actressContainer">
+                <Label Content="演员:"/>
+                <!--<Label Name="actressLabel"/>
+                <Button Content="复制" Click="OnCopyActress"/>-->
+            </WrapPanel>
+            <Button Content="更新" Grid.Row="4" Click="OnUpdateVideo"/>
+        </Grid>
     </Grid>
 </controls:MetroWindow>

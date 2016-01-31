@@ -17,11 +17,16 @@
         </Grid.ColumnDefinitions>
         <ToolBar Grid.Column="0">
             <Button Content="添加" Click="OnShowNewVideoWindow"/>
+            <Label Content="排序:"/>
+            <ComboBox SelectedIndex="0" SelectionChanged="onSortChanged">
+                <ComboBoxItem Content="生产日期"/>
+                <ComboBoxItem Content="识别码"/>
+            </ComboBox>
         </ToolBar>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
-            <Button Content="下一页"/>
+            <Button Content="上一页" Click="OnPrevPageHander"/>
             <Label Name="pageLabel" Content="0/0"/>
-            <Button Content="上一页"/>
+            <Button Content="下一页" Click="OnNextPageHandler"/>
         </StackPanel>
     </Grid>
     <ScrollViewer Grid.Row="1">
