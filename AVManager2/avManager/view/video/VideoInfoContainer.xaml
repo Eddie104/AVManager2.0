@@ -18,10 +18,12 @@
         <ToolBar Grid.Column="0">
             <Button Content="添加" Click="OnShowNewVideoWindow"/>
             <Label Content="排序:"/>
-            <ComboBox SelectedIndex="0" SelectionChanged="onSortChanged">
+            <ComboBox Name="sortTypeComboBox" SelectedIndex="0" SelectionChanged="onSortChanged">
                 <ComboBoxItem Content="生产日期"/>
                 <ComboBoxItem Content="识别码"/>
             </ComboBox>
+            <Label Content="类别筛选"/>
+            <ComboBox Name="classTypeComboBox" SelectedIndex="0" SelectionChanged="onClassTypeChanged"/>
         </ToolBar>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
             <Button Content="上一页" Click="OnPrevPageHander"/>

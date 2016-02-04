@@ -21,7 +21,7 @@ namespace avManager.model
             collectionName = "actress";
         }
 
-        public void Init()
+        public void Init(Action callback)
         {
             MongoCursor<BsonDocument> list = MongoDBHelper.Search(collectionName);
             if (list != null)
@@ -29,6 +29,7 @@ namespace avManager.model
                 foreach (BsonDocument doc in list)
                     this.actressList.Add(new Actress(doc));
             }
+            callback();
         }
 
         public Actress AddActress(string name, string alias, DateTime birthday, int height, int bust, int waist, int hip, string cup, string code)

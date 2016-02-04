@@ -14,5 +14,9 @@ namespace avManager.model.data
 
         public ClassType(ObjectId id, string name) : base(id, name) { }
 
+        public override string ToString()
+        {
+            return this.Name;
+        }
     }
 }

@@ -32,16 +32,25 @@ namespace AVManager2
             Console.WriteLine("开始初始化");
             Console.WriteLine("开始初始化ClassType");
             classTypeManager = ClassTypeManager.GetInstance();
-            classTypeManager.Init();
+            classTypeManager.Init(InitActressManager);
+        }
 
+        private void InitActressManager()
+        {
             Console.WriteLine("开始初始化Actress");
             actressManager = ActressManager.GetInstance();
-            actressManager.Init();
+            actressManager.Init(InitVideoManager);
+        }
 
+        private void InitVideoManager()
+        {
             Console.WriteLine("开始初始化Video");
             videoManager = VideoManager.GetInstance();
-            videoManager.Init();
+            videoManager.Init(InitInfo);
+        }
 
+        private void InitInfo()
+        {
             actressInfoContainer.InitActressInfo();
             videoInfoContainer.InitVideoInfo();
         }

@@ -19,9 +19,11 @@ namespace AVManager2.avManager.view.actress
         private static List<SolidColorBrush> colorList = new List<SolidColorBrush>()
         {
             new SolidColorBrush(Colors.Gray),
-            new SolidColorBrush(Colors.LightSeaGreen),
+            new SolidColorBrush(Colors.Green),
             new SolidColorBrush(Colors.DeepSkyBlue),
+            new SolidColorBrush(Colors.DarkViolet),
             new SolidColorBrush(Colors.Yellow),
+            new SolidColorBrush(Colors.OrangeRed),
             new SolidColorBrush(Colors.Red)
         };
 

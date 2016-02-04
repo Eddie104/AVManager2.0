@@ -26,6 +26,8 @@
                         <ComboBoxItem Content="推荐"/>
                         <ComboBoxItem Content="女神"/>
                         <ComboBoxItem Content="殿堂女神"/>
+                        <ComboBoxItem Content="天后"/>
+                        <ComboBoxItem Content="殿堂天后"/>
                     </ComboBox>
                 </DockPanel>
                 <DockPanel DockPanel.Dock="Bottom">

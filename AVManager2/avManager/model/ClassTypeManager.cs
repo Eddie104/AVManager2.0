@@ -2,6 +2,7 @@
 using libra.db.mongoDB;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 
 namespace avManager.model
@@ -19,7 +20,7 @@ namespace avManager.model
             collectionName = "classType";
         }
 
-        public void Init()
+        public void Init(Action callback)
         {
             MongoCursor<BsonDocument> list = MongoDBHelper.Search(collectionName);
             if (list != null)
@@ -27,6 +28,34 @@ namespace avManager.model
                 foreach (BsonDocument doc in list)
                     this.classTypeList.Add(new ClassType(doc));
             }
+            callback();
+        }
+
+        /// <summary>
+        /// 获取重复的classType
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, List<ClassType>> GetRepeatClassType()
+        {
+            Dictionary<string, List<ClassType>> result = new Dictionary<string, List<ClassType>>();
+            foreach (var item in classTypeList)
+            {
+                if (this.classTypeList.FindAll(c => c.Name == item.Name).Count > 1)
+                {
+                    List<ClassType> list = null;
+                    if (result.ContainsKey(item.Name))
+                    {
+                        list = result[item.Name];
+                    }
+                    else
+                    {
+                        list = new List<ClassType>();
+                        result[item.Name] = list;
+                    }
+                    list.Add(item);
+                }
+            }
+            return result;
         }
 
         public ClassType AddTypeClass(string name)
@@ -86,6 +115,11 @@ namespace avManager.model
                 return this.AddTypeClass(name);
             }
             return null;
+        }
+
+        public List<ClassType> GetClassType()
+        {
+            return new List<ClassType>(this.classTypeList.ToArray());
         }
 
         public void SaveToDB()

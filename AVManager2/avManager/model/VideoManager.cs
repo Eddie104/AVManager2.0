@@ -25,7 +25,7 @@ namespace avManager.model
             collectionName = "video";
         }
 
-        public void Init()
+        public void Init(Action callback)
         {
             MongoCursor<BsonDocument> list = MongoDBHelper.Search(collectionName);
             if (list != null)
@@ -43,6 +43,36 @@ namespace avManager.model
                     AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), d.Name));
                 }
             }
+            //// 将重复的classType删除
+            //Dictionary<string, List<ClassType>> repeatClassType = ClassTypeManager.GetInstance().GetRepeatClassType();
+            //// 遍历所有video
+            //foreach (var video in videoList)
+            //{
+            //    // 遍历所有重复的classType
+            //    foreach (var keyVal in repeatClassType)
+            //    {
+            //        foreach (var classType in keyVal.Value)
+            //        {
+            //            // 一旦发现video中包含了重复的classType
+            //            // 就把video中重复的classType都删掉，然后加入repeatClassType中的第一个classType
+            //            if (video.ClassList.Contains(classType.ID))
+            //            {
+            //                int index = 0;
+            //                foreach (var classType1 in keyVal.Value)
+            //                {
+            //                    if(index++ > 0)
+            //                    {
+            //                        classType1.NeedDelete = true;
+            //                    }
+            //                    video.ClassList.Remove(classType1.ID);
+            //                }
+            //                video.ClassList.Add(keyVal.Value[0].ID);
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
+            callback();
         }
 
         public Video AddVideo(Video v)
@@ -105,9 +135,13 @@ namespace avManager.model
             return null;
         }
 
-        public List<Video> GetVideoList(SortType sortType = SortType.VideoBirthday, bool desc = false)
+        public List<Video> GetVideoList(ObjectId classTypeID, SortType sortType = SortType.VideoBirthday, bool desc = false)
         {
             var list = new List<Video>(this.videoList.ToArray());
+            if(classTypeID != ObjectId.Empty)
+            {
+                list.RemoveAll(v => !v.ClassList.Contains(classTypeID));
+            }
             if(sortType == SortType.VideoCode)
             {
                 list.Sort(new SortByVideoCodeCamparer(desc));
@@ -191,15 +225,15 @@ namespace avManager.model
             for (int i = 0; i < tdList.Count; i++)
             {
                 item = tdList[i].ToString();
-                if (item.Contains("识别码"))
+                if (item.Contains("识别码:"))
                 {
                     v.Code = tdList[i + 1].ToString().Replace("<td class=\"text\">", "").Replace("</td>", "");
                 }
-                else if (item.Contains("发行日期"))
+                else if (item.Contains("发行日期:"))
                 {
                     v.Date = DateTime.Parse(tdList[i + 1].ToString().Replace("<td class=\"text\">", "").Replace("</td>", ""));
                 }
-                else if (item.Contains("类别"))
+                else if (item.Contains("类别:"))
                 {
                     Regex regPlace = new Regex("<a href=\"vl_genre.php\\?g=\\w+\" rel=\"category tag\">");
                     var classList = regA.Matches(tdList[i + 1].ToString());
@@ -210,7 +244,7 @@ namespace avManager.model
                             v.ClassList.Add(classType.ID);
                     }
                 }
-                else if (item.Contains("演员"))
+                else if (item.Contains("演员:"))
                 {
                     Actress a;
                     Regex regPlace = new Regex("<a href=\"vl_star.php\\?s=\\w+\" rel=\"tag\">");

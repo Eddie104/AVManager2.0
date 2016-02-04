@@ -1,19 +1,10 @@
 ﻿using avManager.model;
 using avManager.model.data;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AVManager2.avManager.view.video
 {
@@ -23,7 +14,7 @@ namespace AVManager2.avManager.view.video
     public partial class VideoInfoContainer : Grid
     {
 
-        private const int TOTAL_NUM_PER_PAGE = 36;
+        private const int TOTAL_NUM_PER_PAGE = 27;
 
         private VideoManager videoManager;
 
@@ -72,11 +63,13 @@ namespace AVManager2.avManager.view.video
         public void InitVideoInfo()
         {
             videoManager = VideoManager.GetInstance();
-            //FilterActress(new ActressFilter() { SortByScoreDesc = true });
+            FilterVideo();
 
-            this.videoList = videoManager.GetVideoList();
-            totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
-            PageChanged(1, true);
+            this.classTypeComboBox.Items.Add("所有");
+            foreach (var item in ClassTypeManager.GetInstance().GetClassType())
+            {
+                this.classTypeComboBox.Items.Add(item);
+            }
         }
 
         private void PageChanged(int newPage, bool force = false)
@@ -135,15 +128,33 @@ namespace AVManager2.avManager.view.video
         {
             if (this.IsInitialized)
             {
-                SortType st = SortType.VideoBirthday;
-                if((sender as ComboBox).SelectedIndex == 1)
-                {
-                    st = SortType.VideoCode;
-                }
-               this.videoList = VideoManager.GetInstance().GetVideoList(st);
-                totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
-                PageChanged(1, true);
+                FilterVideo();
             }
+        }
+
+        /// <summary>
+        /// 类别筛选
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void onClassTypeChanged(object sender, SelectionChangedEventArgs e)
+        {
+            FilterVideo();
+        }
+
+        private void FilterVideo()
+        {
+            SortType st = SortType.VideoBirthday;
+            if (sortTypeComboBox.SelectedIndex == 1)
+            {
+                st = SortType.VideoCode;
+            }
+
+            ClassType selectItem = classTypeComboBox.SelectedIndex == 0 ? null : classTypeComboBox.SelectedItem as ClassType;
+
+            this.videoList = videoManager.GetVideoList(selectItem != null ? selectItem.ID : ObjectId.Empty, st, false);
+            totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
+            PageChanged(1, true);
         }
     }
 }
