@@ -6,6 +6,7 @@ using Libra.helper;
 using Libra.log4CSharp;
 using MahApps.Metro.Controls;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -141,6 +142,19 @@ namespace AVManager2.avManager.view.video
             //UpdateHandler(Video, null);
             //this.Dispatcher.Invoke(new Action(() ={ this.UpdateHandler(Video, null); }));
             this.Dispatcher.Invoke(new Action(() => { UpdateHandler(Video, null); Video = Video; }));
+        }
+
+        private void OnPlay(object sender, RoutedEventArgs e)
+        {
+            string videoPath = Config.VIDEO_PATH + video.Code + "\\" + video.Code + ".rmvb";
+            if (File.Exists(videoPath))
+            {
+                Process.Start(videoPath);
+            }
+            else
+            {
+                MessageBox.Show(string.Format("{0}不存在", videoPath));
+            }
         }
 
         //private void OnCopyActress(object sender, RoutedEventArgs e)

@@ -100,9 +100,22 @@ namespace AVManager2
 
         private void button4_Click(object sender, RoutedEventArgs e)
         {
-            this.actressManager.SaveToDB();
-            this.videoManager.SaveToDB();
-            this.classTypeManager.SaveToDB();
+            this.actressManager.SaveToDB(SaveVideo);
+        }
+
+        private void SaveVideo()
+        {
+            this.videoManager.SaveToDB(SaveClassType);
+        }
+
+        private void SaveClassType()
+        {
+            this.classTypeManager.SaveToDB(SaveOK);
+        }
+
+        private void SaveOK()
+        {
+            MessageBox.Show("保存完成");
         }
 
         private void button5_Click(object sender, RoutedEventArgs e)

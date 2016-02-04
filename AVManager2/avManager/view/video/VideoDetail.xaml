@@ -27,6 +27,7 @@
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition Height="AUTO"/>
                 <RowDefinition/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
             <WrapPanel Grid.Row="0">
                 <Label Content="识别码:"/>
@@ -45,7 +46,8 @@
                 <!--<Label Name="actressLabel"/>
                 <Button Content="复制" Click="OnCopyActress"/>-->
             </WrapPanel>
-            <Button Content="更新" Grid.Row="4" Click="OnUpdateVideo"/>
+            <Button Content="播放" Grid.Row="4" Click="OnPlay"/>
+            <Button Content="更新" Grid.Row="5" Click="OnUpdateVideo"/>
         </Grid>
     </Grid>
 </controls:MetroWindow>

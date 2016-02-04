@@ -144,7 +144,7 @@ namespace avManager.model
         //    return actressList.Count > 0 ? actressList[0] : null;
         //}
 
-        public void SaveToDB()
+        public void SaveToDB(Action callback)
         {
             List<Actress> tmp = new List<Actress>(actressList.ToArray());
             foreach (Actress actress in tmp)
@@ -171,6 +171,7 @@ namespace avManager.model
                     }
                 }
             }
+            callback();
         }
 
         public static ActressManager GetInstance()

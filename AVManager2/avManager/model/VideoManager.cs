@@ -165,7 +165,7 @@ namespace avManager.model
             return list;
         }
 
-        public void SaveToDB()
+        public void SaveToDB(Action callback)
         {
             List<Video> tmp = new List<Video>(videoList.ToArray());
             foreach (Video v in tmp)
@@ -192,6 +192,7 @@ namespace avManager.model
                     }
                 }
             }
+            callback();
         }
 
         //public Video CreateVideoFromJav(string html, string code, Video v = null)

@@ -122,7 +122,7 @@ namespace avManager.model
             return new List<ClassType>(this.classTypeList.ToArray());
         }
 
-        public void SaveToDB()
+        public void SaveToDB(Action callback)
         {
             List<ClassType> tmp = new List<ClassType>(classTypeList.ToArray());
             foreach (ClassType classType in tmp)
@@ -149,6 +149,7 @@ namespace avManager.model
                     }
                 }
             }
+            callback();
         }
 
         public static ClassTypeManager GetInstance()
