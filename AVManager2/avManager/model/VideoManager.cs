@@ -2,6 +2,8 @@
 using AVManager2.avManager;
 using libra.db.mongoDB;
 using Libra.helper;
+using Libra.log4CSharp;
+using Microsoft.VisualBasic;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
@@ -28,21 +30,21 @@ namespace avManager.model
         public void Init(Action callback)
         {
             MongoCursor<BsonDocument> list = MongoDBHelper.Search(collectionName);
+            Video v = null;
             if (list != null)
             {
                 foreach (BsonDocument doc in list)
-                    this.videoList.Add(new Video(doc));
-            }
-
-            //看看目录下有哪些是数据库里没有的影片，也都加进来
-            DirectoryInfo dirInfo = new DirectoryInfo(Config.VIDEO_PATH);
-            foreach (DirectoryInfo d in dirInfo.GetDirectories())
-            {
-                if (GetVideo(d.Name) == null)
                 {
-                    AddVideo(new Video(new ObjectId(ObjectIdGenerator.Generate()), d.Name));
+                    v = new Video(doc);
+                    this.videoList.Add(v);
                 }
             }
+
+            foreach(string path in Config.VIDEO_PATH)
+            {
+                CheckVideo(path);
+            }
+            
             //// 将重复的classType删除
             //Dictionary<string, List<ClassType>> repeatClassType = ClassTypeManager.GetInstance().GetRepeatClassType();
             //// 遍历所有video
@@ -60,7 +62,7 @@ namespace avManager.model
             //                int index = 0;
             //                foreach (var classType1 in keyVal.Value)
             //                {
-            //                    if(index++ > 0)
+            //                    if (index++ > 0)
             //                    {
             //                        classType1.NeedDelete = true;
             //                    }
@@ -73,6 +75,31 @@ namespace avManager.model
             //    }
             //}
             callback();
+        }
+
+        private void CheckVideo(string path)
+        {
+            //看看目录下有哪些是数据库里没有的影片，也都加进来
+            DirectoryInfo dirInfo = new DirectoryInfo(path);
+            Video v = null;
+            foreach (DirectoryInfo d in dirInfo.GetDirectories())
+            {
+                v = GetVideo(d.Name);
+                //if (File.Exists(d.FullName + "\\" + d.Name + ".json"))
+                //{
+
+                //}
+                if (v == null)
+                {
+                    v = new Video(new ObjectId(ObjectIdGenerator.Generate()), d.Name);
+                    AddVideo(v);
+                }
+                if(v.Path != path)
+                {
+                    Logger.Error(string.Format("发现相同番号;{0}", v.Code));
+                }
+                v.Path = path;
+            }
         }
 
         public Video AddVideo(Video v)
@@ -135,9 +162,9 @@ namespace avManager.model
             return null;
         }
 
-        public List<Video> GetVideoList(ObjectId classTypeID, SortType sortType = SortType.VideoBirthday, bool desc = false)
+        public List<Video> GetVideoList(ObjectId classTypeID, string code, SortType sortType, bool desc)
         {
-            var list = new List<Video>(this.videoList.ToArray());
+            var list = GetVideoList(code);
             if(classTypeID != ObjectId.Empty)
             {
                 list.RemoveAll(v => !v.ClassList.Contains(classTypeID));
@@ -158,6 +185,24 @@ namespace avManager.model
             foreach (Video v in videoList)
             {
                 if (v.HasActress(actressID))
+                {
+                    list.Add(v);
+                }
+            }
+            return list;
+        }
+
+        public List<Video> GetVideoList(string code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                return new List<Video>(this.videoList.ToArray());
+            }
+            code = code.ToUpper();
+            List<Video> list = new List<Video>();
+            foreach (Video v in videoList)
+            {
+                if (v.Code.Contains(code))
                 {
                     list.Add(v);
                 }
@@ -195,14 +240,55 @@ namespace avManager.model
             callback();
         }
 
-        //public Video CreateVideoFromJav(string html, string code, Video v = null)
-        //{
-        //    if (v == null)
-        //    {
-        //        v = new Video();
-        //    }
-
-        //}
+        /// <summary>
+        /// 解析从javbus上获取到的html
+        /// </summary>
+        /// <param name="html"></param>
+        /// <param name="code"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public Video CreateVideoFromJav(string html, string code, Video v)
+        {
+            // 判断是否有码
+            v.HasMask = !html.Contains("ovie-box-uncensored.css");
+            //<a class="bigImage" href="https://images.javbus.info/cover/d7k_b.jpg"><img
+            v.ImgUrl = Regex.Match(html, "<a class=\"bigImage\".*_b.jpg\"><img").ToString().Replace("<a class=\"bigImage\" href=\"", "").Replace("\"><img", "");
+            // <h3>LAF-41 ラフォーレ ガール Vol.41 天使と悪魔 : 大橋未久 </h3>
+            v.Name = Regex.Match(html, "<h3>.*</h3>").ToString().Replace("<h3>", "").Replace("</h3>", "");
+            //:#CC0000;">LAF-41</span>
+            v.Code = Regex.Match(html, ":#CC0000;\">\\w+-\\d+</span>").ToString().Replace(":#CC0000;\">", "").Replace("</span>", "");
+            v.Date = DateTime.Parse(Regex.Match(html, @"\d{4}-\d{2}-\d{2}").ToString());
+            /*
+            <span class="genre"><a href="https://www.javbus.me/genre/e">巨乳</a></span>
+            */
+            var tdList = Regex.Matches(html, "<span class=\"genre\"><a href=\"https://www.javbus.me/genre/[a-z0-9]+.*</a></span>");
+            string item;
+            for (int i = 0; i < tdList.Count; i++)
+            {
+                item = tdList[i].ToString();
+                item = Strings.StrConv(item, VbStrConv.SimplifiedChinese);
+                item = Regex.Replace(item.Replace("</a></span>", ""), "<span class=\"genre\"><a href=\"https://www.javbus.me/genre/[a-z0-9]+\">", "");
+                ClassType classType = ClassTypeManager.GetInstance().GetClassType(item);
+                if (!v.ClassList.Contains(classType.ID))
+                    v.ClassList.Add(classType.ID);
+            }
+            //<a href="https://www.javbus.me/star/2yl">あやみ旬果</a>
+            Actress a = null;
+            //<a href="https://www.javbus.me/uncensored/star/78x">大橋未久</a>
+            tdList = Regex.Matches(html, "<a href=\"https://www.javbus.me/(uncensored/)?star/[a-z0-9]+\">\\w+</a>");
+            for (int i = 0; i < tdList.Count; i++)
+            {
+                item = tdList[i].ToString();
+                item = Regex.Replace(item.Replace("</a>", ""), "<a href=\"https://www.javbus.me/(uncensored/)?star/[a-z0-9]+\">", "");
+                a = ActressManager.GetInstance().GetActress(item, true);
+                if (a != null)
+                {
+                    if (!v.ActressList.Contains(a.ID))
+                        v.ActressList.Add(a.ID);
+                }
+            }
+            return v;
+        }
 
         public Video CreateVideo(string html, string code, Video v = null)
         {
@@ -210,12 +296,13 @@ namespace avManager.model
             {
                 v = new Video();
             }
+            // 这边的video都是有码的
+            v.HasMask = true;
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033ps.jpg
             //http://pics.dmm.co.jp/mono/movie/adult/118sga033/118sga033pl.jpg
             v.ImgUrl = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
 
-            string name = Regex.Match(Regex.Match(html, "<div id=\"video_title.*</a></h3>").ToString(), @"[A-Z]+-\d+\s.*</a>").ToString().Replace("</a>", "");
-            v.Name = name;
+            v.Name = Regex.Match(Regex.Match(html, "<div id=\"video_title.*</a></h3>").ToString(), @"[A-Z]+-\d+\s.*</a>").ToString().Replace("</a>", "");
 
             var tdList = Regex.Matches(html, @"<td.+?>(?<content>.+?)</td>");
             string item;
@@ -327,7 +414,15 @@ namespace avManager.model
 
         public int Compare(Video a, Video b)
         {
-            return Desc ? b.Date.CompareTo(a.Date) : a.Date.CompareTo(b.Date);
+            int result = b.Date.CompareTo(a.Date);
+            if (result == 0)
+            {
+                return Desc ? b.Code.CompareTo(a.Code) : a.Code.CompareTo(b.Code);
+            }
+            else
+            {
+                return Desc ? result : -result;
+            }
         }
     }
 

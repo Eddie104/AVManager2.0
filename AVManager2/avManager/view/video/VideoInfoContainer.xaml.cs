@@ -144,6 +144,8 @@ namespace AVManager2.avManager.view.video
 
         private void FilterVideo()
         {
+            string code = this.codeTextBox.Text;
+
             SortType st = SortType.VideoBirthday;
             if (sortTypeComboBox.SelectedIndex == 1)
             {
@@ -152,9 +154,14 @@ namespace AVManager2.avManager.view.video
 
             ClassType selectItem = classTypeComboBox.SelectedIndex == 0 ? null : classTypeComboBox.SelectedItem as ClassType;
 
-            this.videoList = videoManager.GetVideoList(selectItem != null ? selectItem.ID : ObjectId.Empty, st, false);
+            this.videoList = videoManager.GetVideoList(selectItem != null ? selectItem.ID : ObjectId.Empty, code, st, false);
             totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
             PageChanged(1, true);
+        }
+
+        private void OnGetVideoByCode(object sender, TextChangedEventArgs e)
+        {
+            this.FilterVideo();
         }
     }
 }

@@ -6,6 +6,7 @@ using Libra.helper;
 using Libra.log4CSharp;
 using MahApps.Metro.Controls;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -22,6 +23,8 @@ namespace AVManager2.avManager.view.video
 
         public event EventHandler UpdateHandler;
 
+        private static List<string> VIDEO_FORMAT = new List<string>() { ".rmvb", ".mp4", ".avi" };
+
         public VideoDetail()
         {
             InitializeComponent();
@@ -34,7 +37,7 @@ namespace AVManager2.avManager.view.video
             set
             {
                 video = value;
-                string imgPath = string.Format("{0}{1}\\{2}l.jpg", Config.VIDEO_PATH, video.Code, video.Code);
+                string imgPath = string.Format("{0}{1}\\{2}l.jpg", video.Path, video.Code, video.Code);
                 if (File.Exists(imgPath))
                 {
                     BitmapImage bitmap = new BitmapImage(new Uri(imgPath));
@@ -86,7 +89,8 @@ namespace AVManager2.avManager.view.video
                 Regex regVideo = new Regex("<div class=\"video\".*" + video.Code + "</div>");
                 var videoItem = regVideo.Match(html);
                 if (!string.IsNullOrEmpty(videoItem.Value))
-                {                    
+                {
+                    // 这是从javlibrary上搜到了不止一个影片信息，那就取第一个信息
                     var m = new Regex("<a href=.* title=").Match(videoItem.Value);
                     var t = m.Value.Replace("\"", "").Replace("<a href=./", "").Replace(" title=", "");
                     HTMLHelper.GetInstance().GetHtml(string.Format("http://www.javlibrary.com/cn/{0}", t), this.callback);
@@ -95,11 +99,15 @@ namespace AVManager2.avManager.view.video
                 {
                     //javlibrary找不到影片信息上找不到，那就到javmoo上去找
                     //HTMLHelper.GetInstance().GetHtml(string.Format("http://www.javmoo.xyz/cn/search/{0}", video.Code), this.callbackOnJav);
-                    MessageBox.Show("找不到相关信息");
+                    //MessageBox.Show("找不到相关信息");
+
+                    //javlibrary找不到影片信息上找不到，那就到javbus上去找
+                    HTMLHelper.GetInstance().GetHtml(string.Format("https://www.javbus.me/{0}", video.Code), this.callbackOnJav);
                 }
             }
             else
             {
+                // 从javlibrary上找到了信息
                 VideoManager.GetInstance().CreateVideo(html, Video.Code, Video);
                 this.onCreateVideo();
             }
@@ -107,18 +115,14 @@ namespace AVManager2.avManager.view.video
 
         private void callbackOnJav(string html)
         {
-            if (html.Contains("搜寻没有结果"))
+            if (html.Contains("404 Page Not Found"))
             {
-                MessageBox.Show("搜寻没有结果");
+                MessageBox.Show("没有搜寻结果");
             }
             else
             {
-                //v.ImgUrl = Regex.Match(Regex.Match(html, "<img id=\\\"video_jacket_img\\\" src=\\\".* width=").ToString(), "http.*jpg").ToString();
-                string s = Regex.Match(html, "<div class=\"item\">.*" + video.Code + "</date>").ToString();
-                MessageBox.Show(s);
-
-                //VideoManager.GetInstance().CreateVideoFromJav(html, Video.Code, Video);
-                //this.onCreateVideo();
+                VideoManager.GetInstance().CreateVideoFromJav(html, Video.Code, Video);
+                this.onCreateVideo();
             }
         }
 
@@ -126,15 +130,26 @@ namespace AVManager2.avManager.view.video
         {
             Video.NeedUpdate = true;
 
-            string path = string.Format("{0}{1}\\{2}", Config.VIDEO_PATH, Video.Code, Video.Code + "l.jpg");
+            string path = string.Format("{0}{1}\\{2}", Video.Path, Video.Code, Video.Code + "l.jpg");
             if (!File.Exists(path))
             {
                 ImageHelper.DoGetImage(Video.ImgUrl, path);
             }
-            path = string.Format("{0}{1}\\{2}", Config.VIDEO_PATH, Video.Code, Video.Code + "s.jpg");
+            path = string.Format("{0}{1}\\{2}", Video.Path, Video.Code, Video.Code + "s.jpg");
             if (!File.Exists(path))
             {
-                ImageHelper.DoGetImage(Video.SubImgUrl, path);
+                try
+                {
+                    ImageHelper.DoGetImage(Video.SubImgUrl, path);
+                }
+                catch (Exception)
+                {
+                    if (Video.SubImgUrl.Contains("thumbs"))
+                    {
+                        Video.SubImgUrl = Video.SubImgUrl.Replace("thumbs", "thumb");
+                        ImageHelper.DoGetImage(Video.SubImgUrl, path);
+                    }
+                }
             }
             //DialogManager.ShowMessageAsync(this, "更新完成", "更新完成");
             MessageBox.Show("ok");
@@ -146,15 +161,17 @@ namespace AVManager2.avManager.view.video
 
         private void OnPlay(object sender, RoutedEventArgs e)
         {
-            string videoPath = Config.VIDEO_PATH + video.Code + "\\" + video.Code + ".rmvb";
-            if (File.Exists(videoPath))
+            string videoPath = null;
+            foreach (var item in VIDEO_FORMAT)
             {
-                Process.Start(videoPath);
+                videoPath = video.Path + video.Code + "\\" + video.Code + item;
+                if (File.Exists(videoPath))
+                {
+                    Process.Start(videoPath);
+                    return;
+                }
             }
-            else
-            {
-                MessageBox.Show(string.Format("{0}不存在", videoPath));
-            }
+            MessageBox.Show(string.Format("{0}木有影片", video.Code));
         }
 
         //private void OnCopyActress(object sender, RoutedEventArgs e)

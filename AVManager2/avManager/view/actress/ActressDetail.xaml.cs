@@ -52,13 +52,6 @@ namespace AVManager2.avManager.view.actress
                     Logger.Error(string.Format("图片:{0}.jpg不存在", actress.Code));
                 }
 
-
-                //int l = videoList.Count;
-                //for (int i = 0; i < l; i++)
-                //{
-                //    videoInfoList[i]
-                //}
-
                 videoList = VideoManager.GetInstance().GetVideoList(actress.ID);
                 totalPage = (int)(Math.Ceiling((double)videoList.Count / TOTAL_NUM_PER_PAGE));
                 PageChanged(1, true);
@@ -77,6 +70,27 @@ namespace AVManager2.avManager.view.actress
                 videoInfo = new VideoInfo();
                 videoContainer.Children.Add(videoInfo);
                 videoInfoList.Add(videoInfo);
+                videoInfo.Click += OnVideoInfoClicked;
+            }
+        }
+
+        private void OnVideoInfoClicked(object sender, EventArgs e)
+        {
+            VideoDetail ad = new VideoDetail();
+            ad.UpdateHandler += OnUpdateHandler;
+            ad.Video = (sender as VideoInfo).Video;
+            ad.ShowDialog();
+        }
+
+        private void OnUpdateHandler(object sender, EventArgs e)
+        {
+            Video v = sender as Video;
+            foreach (var item in videoInfoList)
+            {
+                if (item.UpdateVideo(v))
+                {
+                    break;
+                }
             }
         }
 
@@ -86,7 +100,7 @@ namespace AVManager2.avManager.view.actress
             if (newPage != curPage || force)
             {
                 curPage = newPage;
-                //pageLabel.Text = string.Format("{0}/{1}", curPage, totalPage);
+                pageLabel.Content = string.Format("{0}/{1}", curPage, totalPage);
                 this.ShowVideoInfo();
             }
         }
@@ -122,6 +136,16 @@ namespace AVManager2.avManager.view.actress
         {
             Actress.Name = (sender as TextBox).Text;
             Actress.NeedUpdate = true;
+        }
+
+        private void OnPrevPageHander(object sender, RoutedEventArgs e)
+        {
+            PageChanged(Math.Max(1, curPage - 1));
+        }
+
+        private void OnNextPageHandler(object sender, RoutedEventArgs e)
+        {
+            PageChanged(Math.Min(totalPage, curPage + 1));
         }
     }
 }

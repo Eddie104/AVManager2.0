@@ -7,12 +7,6 @@ namespace avManager.model.data
     public class Video : Data
     {
 
-        ///// <summary>
-        ///// 封面
-        ///// </summary>
-        //[DB(DBField = "cover", DataType = DataType.String)]
-        //public string Cover { get; set; }
-
         /// <summary>
         /// 番号
         /// </summary>
@@ -56,6 +50,12 @@ namespace avManager.model.data
         public bool HasDownload { get; set; }
 
         /// <summary>
+        /// 是否有码
+        /// </summary>
+        [DB(DBField = "hasMask", DataType = DataType.boolean)]
+        public bool HasMask { get; set; }
+
+        /// <summary>
         /// 封面的缩略图的地址
         /// </summary>
         public string SubImgUrl { get; set; }
@@ -70,9 +70,23 @@ namespace avManager.model.data
             set
             {
                 imgUrl = value;
-                SubImgUrl = imgUrl.Replace("pl.jpg", "ps.jpg");
+                if (imgUrl.EndsWith("pl.jpg"))
+                {
+                    SubImgUrl = imgUrl.Replace("pl.jpg", "ps.jpg");
+                }
+                else
+                {
+                    // 大图：https://images.javbus.info/cover/d7k_b.jpg
+                    // 小图：https://images.javbus.info/thumbs/d7k.jpg
+                    SubImgUrl = imgUrl.Replace("cover", "thumbs").Replace("_b", "");
+                }
             }
         }
+
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string Path { get; set; }
 
         public Video(BsonDocument bsonDocument) : base(bsonDocument) { Init(); }
 

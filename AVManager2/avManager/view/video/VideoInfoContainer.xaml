@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AVManager2.avManager.view.video"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="600">
     <Grid.RowDefinitions>
-        <RowDefinition Height="30"/>
+        <RowDefinition Height="36"/>
         <RowDefinition/>
     </Grid.RowDefinitions>
     <Grid Grid.Row="0">
@@ -17,17 +17,19 @@
         </Grid.ColumnDefinitions>
         <ToolBar Grid.Column="0">
             <Button Content="添加" Click="OnShowNewVideoWindow"/>
-            <Label Content="排序:"/>
+            <Label Content="番号:" VerticalAlignment="Center"/>
+            <TextBox Name="codeTextBox" Width="60" VerticalAlignment="Center" TextChanged="OnGetVideoByCode" Height="21"/>
+            <Label Content="排序:" VerticalAlignment="Center"/>
             <ComboBox Name="sortTypeComboBox" SelectedIndex="0" SelectionChanged="onSortChanged">
                 <ComboBoxItem Content="生产日期"/>
                 <ComboBoxItem Content="识别码"/>
             </ComboBox>
-            <Label Content="类别筛选"/>
+            <Label Content="类别筛选" VerticalAlignment="Center"/>
             <ComboBox Name="classTypeComboBox" SelectedIndex="0" SelectionChanged="onClassTypeChanged"/>
         </ToolBar>
         <StackPanel Grid.Column="1" Orientation="Horizontal">
             <Button Content="上一页" Click="OnPrevPageHander"/>
-            <Label Name="pageLabel" Content="0/0"/>
+            <Label Name="pageLabel" Content="0/0" VerticalAlignment="Center"/>
             <Button Content="下一页" Click="OnNextPageHandler"/>
         </StackPanel>
     </Grid>

@@ -9,11 +9,24 @@
         Title="ActressDetail" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="AUTO"/>
+            <RowDefinition Height="36"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Button Content="更新影片"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="AUTO"/>
+                </Grid.ColumnDefinitions>
+                <ToolBar Grid.Column="0">
+                    <Button Content="test"/>
+                </ToolBar>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Content="上一页" Click="OnPrevPageHander"/>
+                    <Label Name="pageLabel" Content="0/0" VerticalAlignment="Center"/>
+                    <Button Content="下一页" Click="OnNextPageHandler"/>
+                </StackPanel>
+            </Grid>
         </Grid>
         <WrapPanel Name="videoContainer" Grid.Row="1">
             <DockPanel LastChildFill="False" Width="147" Height="255" Margin="5, 1, 1, 1">

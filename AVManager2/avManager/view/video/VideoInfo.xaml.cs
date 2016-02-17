@@ -36,7 +36,7 @@ namespace AVManager2.avManager.view.video
                 {
                     this.Visibility = Visibility.Visible;
 
-                    string imgPath = string.Format("{0}{1}\\{2}s.jpg", Config.VIDEO_PATH, video.Code, video.Code);
+                    string imgPath = string.Format("{0}{1}\\{2}s.jpg", video.Path, video.Code, video.Code);
                     if (File.Exists(imgPath))
                     {
                         BitmapImage bitmap = new BitmapImage(new Uri(imgPath));
